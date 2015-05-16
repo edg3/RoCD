@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RoCD.Mechanics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,11 @@ namespace RoCD.Helpers.Tiles
 
         public Tile this[int i, int j]
         {
-            get { return _map[i, j]; }
+            get {
+                if ((i < 0) || (j < 0) || (i > 199) || (j > 199))
+                    return null;
+                return _map[i, j];
+            }
         }
 
         public Map()
@@ -71,6 +76,63 @@ namespace RoCD.Helpers.Tiles
             }
 
             return adj;
+        }
+
+        public enum Direction
+        {
+            Right,
+            DownRight,
+            Down,
+            DownLeft,
+            Left,
+            UpLeft,
+            Up,
+            UpRight
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="toMove"></param>
+        /// <param name="direction"></param>
+        /// <returns>Distance moved.</returns>
+        public double MoveActor(Actor toMove, Direction direction)
+        {
+            var tileAt = this[toMove.X, toMove.Y];
+            Tile tileTo = null;
+
+            int n_x = 0;
+            int n_y = 0;
+
+            double distanceMoved = 0;
+
+            switch (direction)
+            {
+                case Direction.Down:      n_x = toMove.X; n_y = toMove.Y + 1;       tileTo = this[toMove.X, toMove.Y + 1]; distanceMoved = 1; break;
+                case Direction.DownLeft:  n_x = toMove.X - 1; n_y = toMove.Y + 1;   tileTo = this[toMove.X - 1, toMove.Y + 1];  distanceMoved = 1.4142d; break;
+                case Direction.DownRight: n_x = toMove.X + 1; n_y = toMove.Y + 1;   tileTo = this[toMove.X + 1, toMove.Y + 1];  distanceMoved = 1.4142d; break;
+                case Direction.Left:      n_x = toMove.X - 1; n_y = toMove.Y;       tileTo = this[toMove.X - 1, toMove.Y];      distanceMoved = 1; break;
+                case Direction.Right:     n_x = toMove.X + 1; n_y = toMove.Y;       tileTo = this[toMove.X + 1, toMove.Y];      distanceMoved = 1; break;
+                case Direction.Up:        n_x = toMove.X; n_y = toMove.Y - 1;       tileTo = this[toMove.X, toMove.Y - 1];      distanceMoved = 1; break;
+                case Direction.UpLeft:    n_x = toMove.X - 1; n_y = toMove.Y - 1;   tileTo = this[toMove.X - 1, toMove.Y - 1];  distanceMoved = 1.4142d; break;
+                case Direction.UpRight:   n_x = toMove.X + 1; n_y = toMove.Y - 1;   tileTo = this[toMove.X + 1, toMove.Y - 1]; distanceMoved = 1.4142d; break;
+            }
+
+            if (tileTo != null)
+            {
+                if ((tileTo.Pathable) && (tileTo.Contained == null))
+                {
+                    tileTo.Contained = toMove;
+                    tileAt.Contained = null;
+
+                    toMove.X = n_x;
+                    toMove.Y = n_y;
+
+                    return distanceMoved;
+                }
+            }
+
+            return 0;
         }
 
     }

@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using RoCD.Helpers;
 using RoCD.Helpers.Tiles;
+using RoCD.Mechanics;
 
 namespace RoCD
 {
@@ -51,6 +52,7 @@ namespace RoCD
             get { return _spriteSheet; }
         }
 
+        Actor player = new Actor() { X = 19, Y = 19 };
         Map _map = new Map();
         protected override void LoadContent()
         {
@@ -60,7 +62,108 @@ namespace RoCD
             // TODO: use this.Content to load your game content here
             _spriteSheet = Content.Load<Texture2D>("12x12");
 
-            _map[19, 19].Contained = new Mechanics.Actor() { X = 19, Y = 19 };
+            _map[19, 19].Contained = player;
+
+            //TODO: Decent UI stack
+            _uiPermanents.Add(new UIRenderInfo()
+            {
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = Color.Black,
+                    TileColor = Color.White,
+                    TileX = 6,
+                    TileY = 14
+                },
+                X = 0,
+                Y = 0
+            });
+            for (int i = 1; i < 38; i++)
+            {
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 13,
+                        TileY = 12
+                    },
+                    X = i,
+                    Y = 0
+                });
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 13,
+                        TileY = 12
+                    },
+                    X = i,
+                    Y = 38
+                });
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 10,
+                        TileY = 11
+                    },
+                    X = 0,
+                    Y = i
+                });
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 10,
+                        TileY = 11
+                    },
+                    X = 38,
+                    Y = i
+                });
+            }
+            _uiPermanents.Add(new UIRenderInfo()
+            {
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = Color.Black,
+                    TileColor = Color.White,
+                    TileX = 11,
+                    TileY = 11
+                },
+                X = 38,
+                Y = 0
+            });
+            _uiPermanents.Add(new UIRenderInfo()
+            {
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = Color.Black,
+                    TileColor = Color.White,
+                    TileX = 10,
+                    TileY = 12
+                },
+                X = 38,
+                Y = 38
+            });
+            _uiPermanents.Add(new UIRenderInfo()
+            {
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = Color.Black,
+                    TileColor = Color.White,
+                    TileX = 8,
+                    TileY = 12
+                },
+                X = 0,
+                Y = 38
+            });
         }
 
         /// <summary>
@@ -84,9 +187,44 @@ namespace RoCD
                 this.Exit();
 
             // TODO: Add your update logic here
+            KeyboardState ks = Keyboard.GetState();
+            if (ks.IsKeyDown(Keys.Right) || ks.IsKeyDown(Keys.D))
+            {
+                _map.MoveActor(player, Map.Direction.Right);
+            }
+            if (ks.IsKeyDown(Keys.Left) || ks.IsKeyDown(Keys.A))
+            {
+                _map.MoveActor(player, Map.Direction.Left);
+            }
+            if (ks.IsKeyDown(Keys.Up) || ks.IsKeyDown(Keys.W))
+            {
+                _map.MoveActor(player, Map.Direction.Up);
+            }
+            if (ks.IsKeyDown(Keys.Down) || ks.IsKeyDown(Keys.S))
+            {
+                _map.MoveActor(player, Map.Direction.Down);
+            }
+            if (ks.IsKeyDown(Keys.Q))
+            {
+                _map.MoveActor(player, Map.Direction.UpLeft);
+            }
+            if (ks.IsKeyDown(Keys.E))
+            {
+                _map.MoveActor(player, Map.Direction.UpRight);
+            }
+            if (ks.IsKeyDown(Keys.Z))
+            {
+                _map.MoveActor(player, Map.Direction.DownLeft);
+            }
+            if (ks.IsKeyDown(Keys.C))
+            {
+                _map.MoveActor(player, Map.Direction.DownRight);
+            }
 
             base.Update(gameTime);
         }
+
+        List<UIRenderInfo> _uiPermanents = new List<UIRenderInfo>();
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -98,12 +236,18 @@ namespace RoCD
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             // TODO: Add your drawing code here
-            for (int i = 1; i < 39; i++)
+            for (int i = player.X - 18; i < player.X + 19; i++)
             {
-                for (int j = 1; j < 39; j++)
+                for (int j = player.Y - 18; j < player.Y + 19; j++)
                 {
-                    SpritesheetHelper.RenderTile(_map[i,j], spriteBatch, SpriteSheet, new Rectangle(i * 12, j * 12, 12, 12));
+                    if ((i < 0) || (j < 0) || (i >= 200) || (j >= 200)) continue;
+                    SpritesheetHelper.RenderTile(_map[i, j], spriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                 }
+            }
+
+            foreach (var item in _uiPermanents)
+            {
+                SpritesheetHelper.RenderTile(item.RenderInfo, spriteBatch, SpriteSheet, new Rectangle(item.X * 12, item.Y * 12, 12, 12));
             }
 
             spriteBatch.End();

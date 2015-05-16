@@ -80,6 +80,7 @@
     <Compile Include="Helpers\Tiles\Map.cs" />
     <Compile Include="Helpers\Tiles\Tile.cs" />
     <Compile Include="Helpers\Tiles\TileRenderInfo.cs" />
+    <Compile Include="Helpers\UIRenderInfo.cs" />
     <Compile Include="Mechanics\Actor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

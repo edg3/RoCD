@@ -9,7 +9,7 @@ namespace RoCD.Helpers.Tiles
 {
     public class TileRenderInfo
     {
-        public Color BackColour = new Color();
+        public Color BackColor = new Color();
         public Color TileColor = new Color();
 
         public byte TileX = 0;
@@ -19,10 +19,10 @@ namespace RoCD.Helpers.Tiles
         {
             writer.Write(TileX);
             writer.Write(TileY);
-            writer.Write(BackColour.A);
-            writer.Write(BackColour.B);
-            writer.Write(BackColour.G);
-            writer.Write(BackColour.R);
+            writer.Write(BackColor.A);
+            writer.Write(BackColor.B);
+            writer.Write(BackColor.G);
+            writer.Write(BackColor.R);
             writer.Write(TileColor.A);
             writer.Write(TileColor.B);
             writer.Write(TileColor.G);
@@ -33,10 +33,10 @@ namespace RoCD.Helpers.Tiles
         {
             TileX = reader.ReadByte();
             TileY = reader.ReadByte();
-            BackColour.A = reader.ReadByte();
-            BackColour.B = reader.ReadByte();
-            BackColour.G = reader.ReadByte();
-            BackColour.R = reader.ReadByte();
+            BackColor.A = reader.ReadByte();
+            BackColor.B = reader.ReadByte();
+            BackColor.G = reader.ReadByte();
+            BackColor.R = reader.ReadByte();
             TileColor.A = reader.ReadByte();
             TileColor.B = reader.ReadByte();
             TileColor.G = reader.ReadByte();

@@ -23,7 +23,7 @@ namespace RoCD.Helpers
                 Pathable = true,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColour = col_GrassBack[rnd.Next(col_GrassBack.Length)],
+                    BackColor = col_GrassBack[rnd.Next(col_GrassBack.Length)],
                     TileColor = col_GrassFront[rnd.Next(col_GrassFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
@@ -45,7 +45,7 @@ namespace RoCD.Helpers
                 Pathable = true,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColour = col_DirtBack[rnd.Next(col_DirtBack.Length)],
+                    BackColor = col_DirtBack[rnd.Next(col_DirtBack.Length)],
                     TileColor = col_DirtFront[rnd.Next(col_DirtFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
@@ -67,7 +67,7 @@ namespace RoCD.Helpers
                 Pathable = false,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColour = col_WaterBack[rnd.Next(col_WaterBack.Length)],
+                    BackColor = col_WaterBack[rnd.Next(col_WaterBack.Length)],
                     TileColor = col_WaterFront[rnd.Next(col_WaterFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
