@@ -75,6 +75,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\GameStates\InGameScreen.cs" />
     <Compile Include="Helpers\TileFactory.cs" />
     <Compile Include="Helpers\SpritesheetHelper.cs" />
     <Compile Include="Helpers\Tiles\Map.cs" />
@@ -84,6 +85,21 @@
     <Compile Include="Mechanics\Actor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="RapidXNA\Engine.cs" />
+    <Compile Include="RapidXNA\EngineServices.cs" />
+    <Compile Include="RapidXNA\Interfaces\IGameScreen.cs" />
+    <Compile Include="RapidXNA\Interfaces\IRapidService.cs" />
+    <Compile Include="RapidXNA\Models\GameScreen.cs" />
+    <Compile Include="RapidXNA\Models\RapidService.cs" />
+    <Compile Include="RapidXNA\Models\UI\UIBlank.cs" />
+    <Compile Include="RapidXNA\Models\UI\UIRect.cs" />
+    <Compile Include="RapidXNA\Services\ConvertService.cs" />
+    <Compile Include="RapidXNA\Services\InputService.cs" />
+    <Compile Include="RapidXNA\Services\QuadTreeService.cs" />
+    <Compile Include="RapidXNA\Services\ScreenService.cs" />
+    <Compile Include="RapidXNA\Services\ScreenshotService.cs" />
+    <Compile Include="RapidXNA\Services\SettingsService.cs" />
+    <Compile Include="RapidXNA\Services\UIService.cs" />
     <Compile Include="RoCDGame.cs" />
   </ItemGroup>
   <ItemGroup>
