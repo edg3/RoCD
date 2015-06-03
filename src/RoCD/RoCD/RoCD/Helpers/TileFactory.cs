@@ -76,5 +76,25 @@ namespace RoCD.Helpers
 
             return t;
         }
+
+        private static Color col_BlankBack = Color.Red;
+        private static Color col_BlankFront = Color.Yellow;
+
+        public static Tile Blank()
+        {
+            Tile t = new Tile()
+            {
+                Pathable = false,
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = col_BlankBack,
+                    TileColor = col_BlankFront,
+                    TileX = (byte)8,
+                    TileY = (byte)36
+                }
+            };
+
+            return t;
+        }
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using RapidXNA;
 using RapidXNA.Models;
+using System.IO;
 
 namespace RoCD.Game.GameStates
 {
@@ -32,7 +33,11 @@ namespace RoCD.Game.GameStates
 
             _spriteSheet = Engine.ContentManager.Load<Texture2D>("12x12");
 
-            _map[19, 19].Contained = player;
+            var pnt = _map._cities[0];
+
+            player.X = (int)(pnt.X);
+            player.Y = (int)(pnt.Y);
+            _map[(int)(pnt.X), (int)(pnt.Y)].Contained = player;
 
             //TODO: Decent UI stack
             _uiPermanents.Add(new UIRenderInfo()
@@ -97,6 +102,18 @@ namespace RoCD.Game.GameStates
                     X = 38,
                     Y = i
                 });
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 10,
+                        TileY = 11
+                    },
+                    X = 65,
+                    Y = i
+                });
             }
             _uiPermanents.Add(new UIRenderInfo()
             {
@@ -105,7 +122,7 @@ namespace RoCD.Game.GameStates
                     BackColor = Color.Black,
                     TileColor = Color.White,
                     TileX = 11,
-                    TileY = 11
+                    TileY = 12
                 },
                 X = 38,
                 Y = 0
@@ -134,42 +151,96 @@ namespace RoCD.Game.GameStates
                 X = 0,
                 Y = 38
             });
+
+            for (int i = 39; i < 65; i++)
+            {
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 13,
+                        TileY = 12
+                    },
+                    X = i,
+                    Y = 0
+                });
+                _uiPermanents.Add(new UIRenderInfo()
+                {
+                    RenderInfo = new TileRenderInfo()
+                    {
+                        BackColor = Color.Black,
+                        TileColor = Color.White,
+                        TileX = 13,
+                        TileY = 12
+                    },
+                    X = i,
+                    Y = 38
+                });
+            }
+
+           //65
+
         }
 
+        double count = 0;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             var ks = Engine.InputService;
-            if (ks.Keyboard.KeyPress(Keys.Right) || ks.Keyboard.KeyPress(Keys.D))
+
+            if (count <= 0)
             {
-                _map.MoveActor(player, Map.Direction.Right);
+                bool moved = false;
+                if (ks.Keyboard.KeyHeld(Keys.Right) || ks.Keyboard.KeyHeld(Keys.D))
+                {
+                    _map.MoveActor(player, Map.Direction.Right);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.Left) || ks.Keyboard.KeyHeld(Keys.A))
+                {
+                    _map.MoveActor(player, Map.Direction.Left);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.Up) || ks.Keyboard.KeyHeld(Keys.W))
+                {
+                    _map.MoveActor(player, Map.Direction.Up);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.Down) || ks.Keyboard.KeyHeld(Keys.S))
+                {
+                    _map.MoveActor(player, Map.Direction.Down);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.Q))
+                {
+                    _map.MoveActor(player, Map.Direction.UpLeft);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.E))
+                {
+                    _map.MoveActor(player, Map.Direction.UpRight);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.Z))
+                {
+                    _map.MoveActor(player, Map.Direction.DownLeft);
+                    moved = true;
+                }
+                if (ks.Keyboard.KeyHeld(Keys.C))
+                {
+                    _map.MoveActor(player, Map.Direction.DownRight);
+                    moved = true;
+                }
+
+                if (moved)
+                {
+                    count += 5;
+                }
             }
-            if (ks.Keyboard.KeyPress(Keys.Left) || ks.Keyboard.KeyPress(Keys.A))
+            else if (count > 0)
             {
-                _map.MoveActor(player, Map.Direction.Left);
-            }
-            if (ks.Keyboard.KeyPress(Keys.Up) || ks.Keyboard.KeyPress(Keys.W))
-            {
-                _map.MoveActor(player, Map.Direction.Up);
-            }
-            if (ks.Keyboard.KeyPress(Keys.Down) || ks.Keyboard.KeyPress(Keys.S))
-            {
-                _map.MoveActor(player, Map.Direction.Down);
-            }
-            if (ks.Keyboard.KeyPress(Keys.Q))
-            {
-                _map.MoveActor(player, Map.Direction.UpLeft);
-            }
-            if (ks.Keyboard.KeyPress(Keys.E))
-            {
-                _map.MoveActor(player, Map.Direction.UpRight);
-            }
-            if (ks.Keyboard.KeyPress(Keys.Z))
-            {
-                _map.MoveActor(player, Map.Direction.DownLeft);
-            }
-            if (ks.Keyboard.KeyPress(Keys.C))
-            {
-                _map.MoveActor(player, Map.Direction.DownRight);
+                count -= gameTime.ElapsedGameTime.Milliseconds;
             }
         }
 
@@ -182,7 +253,7 @@ namespace RoCD.Game.GameStates
             {
                 for (int j = player.Y - 18; j < player.Y + 19; j++)
                 {
-                    if ((i < 0) || (j < 0) || (i >= 200) || (j >= 200)) continue;
+                    if ((i < 0) || (j < 0) || (i >= 2000) || (j >= 2000)) continue;
                     SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                 }
             }
@@ -190,6 +261,27 @@ namespace RoCD.Game.GameStates
             foreach (var item in _uiPermanents)
             {
                 SpritesheetHelper.RenderTile(item.RenderInfo, Engine.SpriteBatch, SpriteSheet, new Rectangle(item.X * 12, item.Y * 12, 12, 12));
+            }
+
+            var ks = Engine.InputService;
+            if (ks.Keyboard.KeyPress(Keys.P))
+            {
+                Texture2D t2d = new Texture2D(Engine.GraphicsDevice, 2000, 2000);
+                uint[] colordata = new uint[2000 * 2000];
+                for (int i = 0; i < 2000; i++)
+                {
+                    for (int j = 0; j < 2000; j++)
+                    {
+                        var color = _map[i, j].RenderInfo.BackColor;
+                        colordata[i + j * 2000] = (uint)((color.R << 24) | (color.B << 16) | (color.G << 8) | (color.A << 0));
+                    }
+                }
+                t2d.SetData<uint>(colordata);
+                using (var fs = new FileStream(DateTime.Now.ToString("RoCD_test_worldmap_yyyyMMdd-hhmmss") + ".png", FileMode.CreateNew))
+                {
+                    t2d.SaveAsPng(fs, 2000, 2000);
+                }
+                
             }
         }
 
