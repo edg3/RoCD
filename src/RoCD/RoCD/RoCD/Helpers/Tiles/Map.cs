@@ -37,6 +37,9 @@ namespace RoCD.Helpers.Tiles
 
             //PCG:
             //place 8 cities
+            List<Vector2> _cPathA = new List<Vector2>();
+            List<Vector2> _cPathB = new List<Vector2>();
+
             _cities = new List<Vector2>();
             for (int i = 0; i < 8; i++)
             {
@@ -58,10 +61,16 @@ namespace RoCD.Helpers.Tiles
                     }
                 }
 
+                if (_cities.Count() > 1)
+                {
+                    _cPathA.Add(_cities.Last());
+                    _cPathB.Add(pnt);
+                }
+
                 _cities.Add(pnt);
 
                 //Fill city temporarily
-                int size = rndm.Next(70, 180);
+                int size = rndm.Next(70, 250);
                 for (int q = (int)(pnt.X - size / 2); q < (int)(pnt.X + size / 2); q++)
                 {
                     for (int r = (int)(pnt.Y - size / 2); r < (int)(pnt.Y + size / 2); r++)
@@ -74,8 +83,7 @@ namespace RoCD.Helpers.Tiles
             }
 
             //Chain cities together with a simple pathway:
-            List<Vector2> _cPathA = new List<Vector2>();
-            List<Vector2> _cPathB = new List<Vector2>();
+            
             for (int p = 0; p < _cities.Count; p++)
             {
                 var pA = _cities[p];
@@ -113,10 +121,13 @@ namespace RoCD.Helpers.Tiles
                                 q_a = q_b;
                                 q_b = t;
                             }
+                            int r_q = 4;
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = (int)(pA.X - 4); r < pA.X + 4; r++)
-                                    _map[r, q] = TileFactory.Grass();
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = (int)(pA.X - r_q); r < pA.X + r_q; r++)
+                                    _map[r, q] = (_map[r, q].Pathable == true ? _map[r, q] : TileFactory.Path());
                             }
                             q_a = m_y;
                             q_b = (int)pB.Y;
@@ -128,8 +139,10 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = (int)(pB.X - 4); r < pB.X + 4; r++)
-                                    _map[r, q] = TileFactory.Grass();
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = (int)(pB.X - r_q); r < pB.X + r_q; r++)
+                                    _map[r, q] = (_map[r, q].Pathable == true ? _map[r, q] : TileFactory.Path());
                             }
                             q_a = (int)pA.X;
                             q_b = (int)pB.X;
@@ -141,9 +154,11 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = m_y - 4; r < m_y + 4; r++)
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = m_y - r_q; r < m_y + r_q; r++)
                                 {
-                                    _map[q, r] = TileFactory.Grass();
+                                    _map[q, r] = (_map[q, r].Pathable == true ? _map[q, r] : TileFactory.Path());
                                 }
                             }
                         } break;
@@ -159,10 +174,13 @@ namespace RoCD.Helpers.Tiles
                                 q_a = q_b;
                                 q_b = t;
                             }
+                            int r_q = 4;
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = (int)(pA.Y - 4); r < pA.Y + 4; r++)
-                                    _map[q, r] = TileFactory.Grass();
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = (int)(pA.Y - r_q); r < pA.Y + r_q; r++)
+                                    _map[q, r] = (_map[q, r].Pathable == true ? _map[q, r] : TileFactory.Path());
                             }
                             q_a = m_x;
                             q_b = (int)pB.X;
@@ -174,8 +192,10 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = (int)(pB.Y - 4); r < pB.Y + 4; r++)
-                                    _map[q, r] = TileFactory.Grass();
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = (int)(pB.Y - r_q); r < pB.Y + r_q; r++)
+                                    _map[q, r] = (_map[q, r].Pathable == true ? _map[q, r] : TileFactory.Path());
                             }
                             q_a = (int)pA.Y;
                             q_b = (int)pB.Y;
@@ -187,14 +207,45 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                for (int r = m_x - 4; r < m_x + 4; r++)
+                                r_q += rndm.Next(3) - 1;
+                                r_q = (int)MathHelper.Clamp(r_q, 4, 8);
+                                for (int r = m_x - r_q; r < m_x + r_q; r++)
                                 {
-                                    _map[r, q] = TileFactory.Grass();
+                                    _map[r, q] = (_map[r, q].Pathable == true ? _map[r, q] : TileFactory.Path());
                                 }
                             }
                         } break;
                 }
             }
+
+            //build a fully connected and interesting world map
+            List<Point> Connections = new List<Point>();
+            for (int i = 0; i < 30000; i++)
+            {
+                Connections.Add(new Point(rndm.Next(100, 1900), rndm.Next(100, 1900)));
+            }
+
+            Connections = (from item in Connections
+                           where PointHasPointNextToIt(Connections, item)
+                           select item).ToList();
+
+            foreach (var pnt in Connections)
+            {
+                int r = rndm.Next(10, 40);
+                for (int i = pnt.X - r; i < pnt.X + r; i++)
+                {
+                    for (int j = pnt.Y - r; j < pnt.Y + r; j++)
+                    {
+                        if ((i < 0) || (i > 1999) || (j < 0) || (j > 1999)) continue;
+
+                        if (Math.Sqrt((pnt.X - i)*(pnt.X - i) + (pnt.Y - j)*(pnt.Y -j)) <= r)
+                        {
+                            _map[i, j] = (_map[i, j].Pathable == true ? _map[i, j] : TileFactory.Grass());
+                        }
+                    }
+                }
+            }
+
         }
 
         public List<Point> Adjacent(int x, int y)
@@ -218,6 +269,20 @@ namespace RoCD.Helpers.Tiles
             }
 
             return adj;
+        }
+
+        private bool PointHasPointNextToIt(List<Point> points, Point pnt)
+        {
+            foreach (var point in points)
+            {
+                double dst = Math.Sqrt((pnt.X - point.X)*(pnt.X - point.X) + (pnt.Y - point.Y)*(pnt.Y - point.Y));
+                if ((dst >= 1) && (dst <= 2))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public List<Point> Adjacent(int x, int y, bool pathable)

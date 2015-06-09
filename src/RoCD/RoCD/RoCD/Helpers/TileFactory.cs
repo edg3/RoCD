@@ -96,5 +96,27 @@ namespace RoCD.Helpers
 
             return t;
         }
+
+        private static Color[] col_PathBack = new Color[] { new Color(61, 61, 80), new Color(80, 80, 98), new Color(62,62,72) };
+        private static Color[] col_PathFront = new Color[] { new Color(129, 129, 142), new Color(154, 154, 165) };
+        private static Point[] til_PathTiles = new Point[] { new Point(2, 2), new Point(7, 2), new Point(12, 2), new Point(14, 2), new Point(0, 6), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2) };
+
+        public static Tile Path()
+        {
+            Point p = til_PathTiles[rnd.Next(til_PathTiles.Length)];
+            Tile t = new Tile()
+            {
+                Pathable = true,
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = col_PathBack[rnd.Next(col_PathBack.Length)],
+                    TileColor = col_PathFront[rnd.Next(col_PathFront.Length)],
+                    TileX = (byte)p.X,
+                    TileY = (byte)p.Y
+                }
+            };
+
+            return t;
+        }
     }
 }
