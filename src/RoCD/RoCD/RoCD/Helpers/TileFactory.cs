@@ -97,7 +97,7 @@ namespace RoCD.Helpers
             return t;
         }
 
-        private static Color[] col_PathBack = new Color[] { new Color(61, 61, 80), new Color(80, 80, 98), new Color(62,62,72) };
+        private static Color[] col_PathBack = new Color[] { new Color(61, 61, 80), new Color(80, 80, 98), new Color(62, 62, 72) };
         private static Color[] col_PathFront = new Color[] { new Color(129, 129, 142), new Color(154, 154, 165) };
         private static Point[] til_PathTiles = new Point[] { new Point(2, 2), new Point(7, 2), new Point(12, 2), new Point(14, 2), new Point(0, 6), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2), new Point(0, 2) };
 
@@ -111,6 +111,28 @@ namespace RoCD.Helpers
                 {
                     BackColor = col_PathBack[rnd.Next(col_PathBack.Length)],
                     TileColor = col_PathFront[rnd.Next(col_PathFront.Length)],
+                    TileX = (byte)p.X,
+                    TileY = (byte)p.Y
+                }
+            };
+
+            return t;
+        }
+
+        private static Color[] col_TreeBack = new Color[] { new Color(0, 122, 0), new Color(0, 110, 0), new Color(0, 79, 0) };
+        private static Color[] col_TreeFront = new Color[] { new Color(0, 51, 0), new Color(25, 71, 25), new Color(20, 57, 20) };
+        private static Point[] til_TreeTiles = new Point[] { new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(10, 2) };
+
+        public static Tile Tree()
+        {
+            Point p = til_TreeTiles[rnd.Next(til_TreeTiles.Length)];
+            Tile t = new Tile()
+            {
+                Pathable = false,
+                RenderInfo = new TileRenderInfo()
+                {
+                    BackColor = col_TreeBack[rnd.Next(col_TreeBack.Length)],
+                    TileColor = col_TreeFront[rnd.Next(col_TreeFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }

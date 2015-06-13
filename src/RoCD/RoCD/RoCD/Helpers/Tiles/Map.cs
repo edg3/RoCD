@@ -41,7 +41,7 @@ namespace RoCD.Helpers.Tiles
             List<Vector2> _cPathB = new List<Vector2>();
 
             _cities = new List<Vector2>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 12; i++)
             {
                 bool tooClose = true;
                 var pnt = new Vector2();
@@ -246,6 +246,70 @@ namespace RoCD.Helpers.Tiles
                 }
             }
 
+            //flood fill the map with structures:
+            for (int i = 0; i < 2000; i++)
+            {
+                for (int j = 0; j < 2000; j++)
+                {
+                    if (_map[i,j].RenderInfo.BackColor == Color.Red)
+                    {
+                        FloodFillFeature(i, j, rndm);
+                    }
+                }
+            }
+
+        }
+
+        private void FloodFillFeature(int i, int j, Random rndm)
+        {
+            //int chosen = rndm.Next(99);
+            //if (chosen < 75)
+            //{
+                FloodFillTrees(i, j);
+            //}
+            //else
+            //{
+            //    FloodFillMountains(i, j);
+            //}
+        }
+
+        private void FloodFillMountains(int i, int j)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void FloodFillTrees(int i, int j)
+        {
+            _map[i, j] = TileFactory.Tree();
+            //TODO: fix stack overflowing
+            //if (i > 1)
+            //{
+            //    if (_map[i - 1, j].RenderInfo.BackColor == Color.Red)
+            //    {
+            //        FloodFillTrees(i - 1, j);
+            //    }
+            //}
+            //if (j > 1)
+            //{
+            //    if (_map[i, j - 1].RenderInfo.BackColor == Color.Red)
+            //    {
+            //        FloodFillTrees(i, j - 1);
+            //    }
+            //}
+            //if (i < 1999)
+            //{
+            //    if (_map[i + 1, j].RenderInfo.BackColor == Color.Red)
+            //    {
+            //        FloodFillTrees(i + 1, j);
+            //    }
+            //}
+            //if (j < 1999)
+            //{
+            //    if (_map[i, j + 1].RenderInfo.BackColor == Color.Red)
+            //    {
+            //        FloodFillTrees(i, j + 1);
+            //    }
+            //}
         }
 
         public List<Point> Adjacent(int x, int y)
