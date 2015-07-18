@@ -75,7 +75,7 @@ namespace RoCD.Helpers.Tiles
                 {
                     for (int r = (int)(pnt.Y - size / 2); r < (int)(pnt.Y + size / 2); r++)
                     {
-                        _map[q, r] = TileFactory.Dirt();
+                        _map[q % 2000, r % 2000] = TileFactory.Dirt();
                     }
                 }
 
@@ -258,6 +258,20 @@ namespace RoCD.Helpers.Tiles
                 }
             }
 
+            //Add in 5000 spawners:
+            for (int i = 0; i < 5000; i++)
+            {
+                int q = rndm.Next(2000);
+                int r = rndm.Next(2000);
+                while (_map[q,r].Pathable == false)
+                {
+                    q = rndm.Next(2000);
+                    r = rndm.Next(2000);
+                }
+
+                _map[q, r].Contained = new Spawner { X = q, Y = r};
+                registeredActors.Add(_map[q, r].Contained);
+            }
         }
 
         private void FloodFillFeature(int i, int j, Random rndm)
@@ -430,5 +444,18 @@ namespace RoCD.Helpers.Tiles
             return 0;
         }
 
+        public List<Actor> registeredActors = new List<Actor>();
+
+        internal void Update()
+        {
+            //TODO: better way to do this
+            for (int i = registeredActors.Count - 1; i > -1; i--)
+            {
+                var item = registeredActors[i];
+                item.Update(this);
+            }
+            //for (int i = 0; i < 2000; i++)
+            //    for (int j = 0; j < 2000; j++)
+        }
     }
 }

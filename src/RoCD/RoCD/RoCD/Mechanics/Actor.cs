@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RoCD.Helpers.Tiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,9 @@ namespace RoCD.Mechanics
         public int X;
         public int Y;
 
+        public virtual void Update(Map _map)
+        {
+
+        }
     }
 }
