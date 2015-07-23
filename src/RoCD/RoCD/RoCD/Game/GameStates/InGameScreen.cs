@@ -24,7 +24,7 @@ namespace RoCD.Game.GameStates
             get { return _spriteSheet; }
         }
 
-        Actor player = new Actor() { X = 19, Y = 19, Identity = "you" };
+        Creature player = new Creature() { X = 19, Y = 19, Identity = "you" };
         Map _map = new Map();
 
         public override void Load()
