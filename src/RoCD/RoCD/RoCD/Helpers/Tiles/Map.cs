@@ -9,13 +9,24 @@ namespace RoCD.Helpers.Tiles
 {
     public class Map
     {
-        Tile[,] _map = new Tile[2000, 2000];
+        public const int MapWidth = 500;
+        public const int MapHeight = 500;
+        public const int CityRange = 30;
+        public const int CitySmall = 10;
+        public const int CityLarge = 30;
+        public const int CityCount = 3;
+        public const int WorldBlotches = 3000;
+        public const int WorldBlotchMin = 10;
+        public const int WorldBlotchMax = 15;
+        public const int SpawnerCount = 100;
+
+        Tile[,] _map = new Tile[MapWidth, MapHeight];
 
         public Tile this[int i, int j]
         {
             get
             {
-                if ((i < 0) || (j < 0) || (i > 1999) || (j > 1999))
+                if ((i < 0) || (j < 0) || (i > MapWidth - 1) || (j > MapHeight - 1))
                     return null;
                 return _map[i, j];
             }
@@ -25,9 +36,9 @@ namespace RoCD.Helpers.Tiles
 
         public Map()
         {
-            for (int i = 0; i < 2000; i++)
+            for (int i = 0; i < MapWidth; i++)
             {
-                for (int j = 0; j < 2000; j++)
+                for (int j = 0; j < MapHeight; j++)
                 {
                     _map[i, j] = TileFactory.Blank(); //TileFactory.Grass();
                 }
@@ -41,20 +52,20 @@ namespace RoCD.Helpers.Tiles
             List<Vector2> _cPathB = new List<Vector2>();
 
             _cities = new List<Vector2>();
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < CityCount; i++)
             {
                 bool tooClose = true;
                 var pnt = new Vector2();
 
                 while (tooClose)
                 {
-                    pnt.X = rndm.Next(100, 1900);
-                    pnt.Y = rndm.Next(100, 1900);
+                    pnt.X = rndm.Next(100, MapWidth - 100);
+                    pnt.Y = rndm.Next(100, MapHeight - 100);
 
                     tooClose = false;
                     foreach (var pnt2 in _cities)
                     {
-                        if ((pnt - pnt2).Length() < 300)
+                        if ((pnt - pnt2).Length() < CityRange)
                         {
                             tooClose = true;
                         }
@@ -70,12 +81,12 @@ namespace RoCD.Helpers.Tiles
                 _cities.Add(pnt);
 
                 //Fill city temporarily
-                int size = rndm.Next(70, 250);
+                int size = rndm.Next(CitySmall, CityLarge);
                 for (int q = (int)(pnt.X - size / 2); q < (int)(pnt.X + size / 2); q++)
                 {
                     for (int r = (int)(pnt.Y - size / 2); r < (int)(pnt.Y + size / 2); r++)
                     {
-                        _map[q % 2000, r % 2000] = TileFactory.Dirt();
+                        _map[q % MapWidth, r % MapHeight] = TileFactory.Dirt();
                     }
                 }
 
@@ -220,9 +231,9 @@ namespace RoCD.Helpers.Tiles
 
             //build a fully connected and interesting world map
             List<Point> Connections = new List<Point>();
-            for (int i = 0; i < 30000; i++)
+            for (int i = 0; i < WorldBlotches; i++)
             {
-                Connections.Add(new Point(rndm.Next(100, 1900), rndm.Next(100, 1900)));
+                Connections.Add(new Point(rndm.Next(100, Map.MapWidth - 100), rndm.Next(100, Map.MapHeight - 100)));
             }
 
             Connections = (from item in Connections
@@ -231,12 +242,12 @@ namespace RoCD.Helpers.Tiles
 
             foreach (var pnt in Connections)
             {
-                int r = rndm.Next(10, 40);
+                int r = rndm.Next(WorldBlotchMin, WorldBlotchMax);
                 for (int i = pnt.X - r; i < pnt.X + r; i++)
                 {
                     for (int j = pnt.Y - r; j < pnt.Y + r; j++)
                     {
-                        if ((i < 0) || (i > 1999) || (j < 0) || (j > 1999)) continue;
+                        if ((i < 0) || (i > MapWidth - 1) || (j < 0) || (j > MapHeight - 1)) continue;
 
                         if (Math.Sqrt((pnt.X - i)*(pnt.X - i) + (pnt.Y - j)*(pnt.Y -j)) <= r)
                         {
@@ -247,9 +258,9 @@ namespace RoCD.Helpers.Tiles
             }
 
             //flood fill the map with structures:
-            for (int i = 0; i < 2000; i++)
+            for (int i = 0; i < MapWidth; i++)
             {
-                for (int j = 0; j < 2000; j++)
+                for (int j = 0; j < MapHeight; j++)
                 {
                     if (_map[i,j].RenderInfo.BackColor == Color.Red)
                     {
@@ -259,14 +270,14 @@ namespace RoCD.Helpers.Tiles
             }
 
             //Add in 5000 spawners:
-            for (int i = 0; i < 5000; i++)
+            for (int i = 0; i < SpawnerCount; i++)
             {
-                int q = rndm.Next(2000);
-                int r = rndm.Next(2000);
+                int q = rndm.Next(MapWidth);
+                int r = rndm.Next(MapHeight);
                 while (_map[q,r].Pathable == false)
                 {
-                    q = rndm.Next(2000);
-                    r = rndm.Next(2000);
+                    q = rndm.Next(MapWidth);
+                    r = rndm.Next(MapHeight);
                 }
 
                 _map[q, r].Contained = new Spawner { X = q, Y = r};
@@ -339,7 +350,7 @@ namespace RoCD.Helpers.Tiles
                     int c_y = y + j;
 
                     //TODO: Adjust for wrapping and multiple map files
-                    if ((c_x > 0) && (c_x < 200) && (c_y >= 0) && (c_y < 200))
+                    if ((c_x > 0) && (c_x < MapWidth) && (c_y >= 0) && (c_y < MapHeight))
                     {
                         adj.Add(new Point(c_x, c_y));
                     }
@@ -376,7 +387,7 @@ namespace RoCD.Helpers.Tiles
                     int c_y = y + j;
 
                     //TODO: Adjust for wrapping and multiple map files
-                    if ((c_x > 0) && (c_x < 200) && (c_y >= 0) && (c_y < 200))
+                    if ((c_x > 0) && (c_x < MapWidth) && (c_y >= 0) && (c_y < MapHeight))
                     {
                         if (_map[c_x, c_y].Pathable == pathable)
                             adj.Add(new Point(c_x, c_y));

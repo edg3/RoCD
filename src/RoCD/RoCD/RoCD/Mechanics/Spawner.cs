@@ -9,6 +9,8 @@ namespace RoCD.Mechanics
 {
     public class Spawner : Actor
     {
+        
+
         public string factoryCode = "0000";
 
         public bool hasSpawned = false;

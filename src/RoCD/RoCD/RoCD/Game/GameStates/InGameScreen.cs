@@ -254,7 +254,7 @@ namespace RoCD.Game.GameStates
             {
                 for (int j = player.Y - 18; j < player.Y + 19; j++)
                 {
-                    if ((i < 0) || (j < 0) || (i >= 2000) || (j >= 2000)) continue;
+                    if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
                     SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                 }
             }
@@ -267,20 +267,20 @@ namespace RoCD.Game.GameStates
             var ks = Engine.InputService;
             if (ks.Keyboard.KeyPress(Keys.P))
             {
-                Texture2D t2d = new Texture2D(Engine.GraphicsDevice, 2000, 2000);
-                uint[] colordata = new uint[2000 * 2000];
-                for (int i = 0; i < 2000; i++)
+                Texture2D t2d = new Texture2D(Engine.GraphicsDevice, Map.MapWidth, Map.MapHeight);
+                uint[] colordata = new uint[Map.MapWidth * Map.MapHeight];
+                for (int i = 0; i < Map.MapWidth; i++)
                 {
-                    for (int j = 0; j < 2000; j++)
+                    for (int j = 0; j < Map.MapHeight; j++)
                     {
                         var color = _map[i, j].RenderInfo.BackColor;
-                        colordata[i + j * 2000] = (uint)((color.R << 24) | (color.B << 16) | (color.G << 8) | (color.A << 0));
+                        colordata[i + j * Map.MapHeight] = (uint)((color.R << 24) | (color.B << 16) | (color.G << 8) | (color.A << 0));
                     }
                 }
                 t2d.SetData<uint>(colordata);
                 using (var fs = new FileStream(DateTime.Now.ToString("RoCD_test_worldmap_yyyyMMdd-hhmmss") + ".png", FileMode.CreateNew))
                 {
-                    t2d.SaveAsPng(fs, 2000, 2000);
+                    t2d.SaveAsPng(fs, Map.MapWidth, Map.MapHeight);
                 }
                 
             }
