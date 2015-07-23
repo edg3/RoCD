@@ -42,7 +42,7 @@ namespace RoCD.Mechanics
                     }
                 }
             }
-            else if (Math.Sqrt(Math.Pow(_player.X - X, 2) + Math.Pow(_player.Y - Y, 2)) < 60)
+            else if (Math.Sqrt(Math.Pow(_player.X - X, 2) + Math.Pow(_player.Y - Y, 2)) > 60)
             {
                 hasSpawned = false;
             }

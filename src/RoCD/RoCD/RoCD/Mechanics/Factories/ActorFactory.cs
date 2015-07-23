@@ -11,7 +11,7 @@ namespace RoCD.Mechanics.Factories
         public static Actor FromCode(string code)
         {
             //TODO: Better method/layout?
-            if (code == "0000") return new Actor { DrawColor = Color.Blue, TileX = 3, TileY = 2 };
+            if (code == "0000") return new Actor { DrawColor = Color.LimeGreen, TileX = 3, TileY = 7, Identity = "slime" };
             else return null;
         }
     }

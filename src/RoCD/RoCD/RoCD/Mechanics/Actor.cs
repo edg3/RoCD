@@ -21,7 +21,8 @@ namespace RoCD.Mechanics
 
         public virtual void Update(Map _map, Actor _player)
         {
-
+            //default update is to roam
+            _map.MoveActor(this, Map.Direction.Random);
         }
 
         public string Identity

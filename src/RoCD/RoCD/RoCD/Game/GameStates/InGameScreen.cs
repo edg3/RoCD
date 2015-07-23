@@ -237,7 +237,7 @@ namespace RoCD.Game.GameStates
 
                 if (moved)
                 {
-                    count += 5;
+                    count += 66;
                     _map.Update(player);
                 }
             }
