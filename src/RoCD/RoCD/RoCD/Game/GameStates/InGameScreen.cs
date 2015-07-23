@@ -24,7 +24,7 @@ namespace RoCD.Game.GameStates
             get { return _spriteSheet; }
         }
 
-        Actor player = new Actor() { X = 19, Y = 19 };
+        Actor player = new Actor() { X = 19, Y = 19, Identity = "you" };
         Map _map = new Map();
 
         public override void Load()
@@ -180,9 +180,11 @@ namespace RoCD.Game.GameStates
                 });
             }
 
-           //65
+            //65
 
         }
+
+        bool showExtras = false;
 
         double count = 0;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -236,12 +238,21 @@ namespace RoCD.Game.GameStates
                 if (moved)
                 {
                     count += 5;
-                    _map.Update();
+                    _map.Update(player);
                 }
             }
             else if (count > 0)
             {
                 count -= gameTime.ElapsedGameTime.Milliseconds;
+            }
+
+            if (ks.Keyboard.KeyHeld(Keys.LeftAlt))
+            {
+                showExtras = true;
+            }
+            else
+            {
+                showExtras = false;
             }
         }
 
@@ -256,6 +267,8 @@ namespace RoCD.Game.GameStates
                 {
                     if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
                     SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+
+
                 }
             }
 
@@ -282,28 +295,91 @@ namespace RoCD.Game.GameStates
                 {
                     t2d.SaveAsPng(fs, Map.MapWidth, Map.MapHeight);
                 }
-                
             }
+
+            if (showExtras)
+            {
+                for (int i = player.X - 18; i < player.X + 19; i++)
+                {
+                    for (int j = player.Y - 18; j < player.Y + 19; j++)
+                    {
+                        if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
+                        if (_map[i, j].Contained != null)
+                        {
+                            ShowInfo(_map[i, j].Contained, Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ShowInfo(Actor actor, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
+        {
+            for (int i = 0; i < actor.Identity.Length; i++)
+            {
+                Point tl = GetCharacterPoint(actor.Identity[i]);
+                TileRenderInfo bti = new TileRenderInfo { TileColor = Color.Black, TileX = 11, TileY = 13};
+                TileRenderInfo ti = new TileRenderInfo { TileColor = Color.White, TileX = (byte)tl.X, TileY = (byte)tl.Y};
+                SpritesheetHelper.RenderTile(bti, spriteBatch, _spriteSheet, target);
+                SpritesheetHelper.RenderTile(ti, spriteBatch, _spriteSheet, target);
+                target = new Rectangle(target.X + 12, target.Y, target.Width, target.Height);
+            }
+        }
+
+        private Point GetCharacterPoint(char p)
+        {
+            switch (p)
+            {
+                case 'a': return new Point(1, 6); break;
+                case 'b': return new Point(2, 6); break;
+                case 'c': return new Point(3, 6); break;
+                case 'd': return new Point(4, 6); break;
+                case 'e': return new Point(5, 6); break;
+                case 'f': return new Point(6, 6); break;
+                case 'g': return new Point(7, 6); break;
+                case 'h': return new Point(8, 6); break;
+                case 'i': return new Point(9, 6); break;
+                case 'j': return new Point(10, 6); break;
+                case 'k': return new Point(11, 6); break;
+                case 'l': return new Point(12, 6); break;
+                case 'm': return new Point(13, 6); break;
+                case 'n': return new Point(14, 6); break;
+                case 'o': return new Point(15, 6); break;
+
+                case 'p': return new Point(0, 7); break;
+                case 'q': return new Point(1, 7); break;
+                case 'r': return new Point(2, 7); break;
+                case 's': return new Point(3, 7); break;
+                case 't': return new Point(4, 7); break;
+                case 'u': return new Point(5, 7); break;
+                case 'v': return new Point(6, 7); break;
+                case 'w': return new Point(7, 7); break;
+                case 'x': return new Point(8, 7); break;
+                case 'y': return new Point(9, 7); break;
+                case 'z': return new Point(10, 7); break;
+            }
+
+            return new Point(0, 2);
         }
 
         public override void PreLoad()
         {
-            
+
         }
 
         public override void LoadUpdate(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            
+
         }
 
         public override void LoadDraw(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            
+
         }
 
         public override void OnPop()
         {
-            
+
         }
     }
 }

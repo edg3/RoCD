@@ -457,13 +457,13 @@ namespace RoCD.Helpers.Tiles
 
         public List<Actor> registeredActors = new List<Actor>();
 
-        internal void Update()
+        internal void Update(Actor player)
         {
             //TODO: better way to do this
             for (int i = registeredActors.Count - 1; i > -1; i--)
             {
                 var item = registeredActors[i];
-                item.Update(this);
+                item.Update(this, player);
             }
             //for (int i = 0; i < 2000; i++)
             //    for (int j = 0; j < 2000; j++)

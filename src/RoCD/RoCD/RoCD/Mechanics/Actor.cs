@@ -19,9 +19,20 @@ namespace RoCD.Mechanics
         public int X;
         public int Y;
 
-        public virtual void Update(Map _map)
+        public virtual void Update(Map _map, Actor _player)
         {
 
+        }
+
+        public string Identity
+        {
+            get;
+            set;
+        }
+
+        public Actor()
+        {
+            Identity = "actor";
         }
     }
 }
