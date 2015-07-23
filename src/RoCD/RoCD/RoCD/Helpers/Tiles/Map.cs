@@ -437,7 +437,7 @@ namespace RoCD.Helpers.Tiles
                 case Direction.Up: n_x = toMove.X; n_y = toMove.Y - 1; tileTo = this[toMove.X, toMove.Y - 1]; distanceMoved = 1; break;
                 case Direction.UpLeft: n_x = toMove.X - 1; n_y = toMove.Y - 1; tileTo = this[toMove.X - 1, toMove.Y - 1]; distanceMoved = 1.4142d; break;
                 case Direction.UpRight: n_x = toMove.X + 1; n_y = toMove.Y - 1; tileTo = this[toMove.X + 1, toMove.Y - 1]; distanceMoved = 1.4142d; break;
-                case Direction.Random: n_x = toMove.X; n_y = toMove.Y - 1; tileTo = this[toMove.X, toMove.Y - 1]; distanceMoved = 1.4142d; break;
+                case Direction.Random: Random rndm = new Random(); n_x = toMove.X + rndm.Next(3) - 1; n_y = toMove.Y + rndm.Next(3) - 1; tileTo = this[n_x, n_y]; distanceMoved = 1.4142d; break;
             }
 
             if (tileTo != null)
