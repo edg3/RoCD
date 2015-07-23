@@ -352,33 +352,33 @@ namespace RoCD.Game.GameStates
         {
             switch (p)
             {
-                case 'a': return new Point(1, 6); break;
-                case 'b': return new Point(2, 6); break;
-                case 'c': return new Point(3, 6); break;
-                case 'd': return new Point(4, 6); break;
-                case 'e': return new Point(5, 6); break;
-                case 'f': return new Point(6, 6); break;
-                case 'g': return new Point(7, 6); break;
-                case 'h': return new Point(8, 6); break;
-                case 'i': return new Point(9, 6); break;
-                case 'j': return new Point(10, 6); break;
-                case 'k': return new Point(11, 6); break;
-                case 'l': return new Point(12, 6); break;
-                case 'm': return new Point(13, 6); break;
-                case 'n': return new Point(14, 6); break;
-                case 'o': return new Point(15, 6); break;
+                case 'a': return new Point(1, 6); 
+                case 'b': return new Point(2, 6); 
+                case 'c': return new Point(3, 6); 
+                case 'd': return new Point(4, 6); 
+                case 'e': return new Point(5, 6); 
+                case 'f': return new Point(6, 6); 
+                case 'g': return new Point(7, 6); 
+                case 'h': return new Point(8, 6); 
+                case 'i': return new Point(9, 6); 
+                case 'j': return new Point(10, 6); 
+                case 'k': return new Point(11, 6); 
+                case 'l': return new Point(12, 6); 
+                case 'm': return new Point(13, 6); 
+                case 'n': return new Point(14, 6); 
+                case 'o': return new Point(15, 6); 
 
-                case 'p': return new Point(0, 7); break;
-                case 'q': return new Point(1, 7); break;
-                case 'r': return new Point(2, 7); break;
-                case 's': return new Point(3, 7); break;
-                case 't': return new Point(4, 7); break;
-                case 'u': return new Point(5, 7); break;
-                case 'v': return new Point(6, 7); break;
-                case 'w': return new Point(7, 7); break;
-                case 'x': return new Point(8, 7); break;
-                case 'y': return new Point(9, 7); break;
-                case 'z': return new Point(10, 7); break;
+                case 'p': return new Point(0, 7); 
+                case 'q': return new Point(1, 7); 
+                case 'r': return new Point(2, 7); 
+                case 's': return new Point(3, 7); 
+                case 't': return new Point(4, 7); 
+                case 'u': return new Point(5, 7); 
+                case 'v': return new Point(6, 7); 
+                case 'w': return new Point(7, 7); 
+                case 'x': return new Point(8, 7); 
+                case 'y': return new Point(9, 7); 
+                case 'z': return new Point(10, 7);
             }
 
             return new Point(0, 2);

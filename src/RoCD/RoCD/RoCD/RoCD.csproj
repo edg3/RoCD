@@ -85,6 +85,8 @@
     <Compile Include="Helpers\Tiles\TileRenderInfo.cs" />
     <Compile Include="Helpers\UIRenderInfo.cs" />
     <Compile Include="Mechanics\Actor.cs" />
+    <Compile Include="Mechanics\AI\Agents\PassiveEnemyAgent.cs" />
+    <Compile Include="Mechanics\AI\IAIAgent.cs" />
     <Compile Include="Mechanics\Factories\ActorFactory.cs" />
     <Compile Include="Mechanics\Spawner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

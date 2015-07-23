@@ -470,5 +470,47 @@ namespace RoCD.Helpers.Tiles
             //for (int i = 0; i < 2000; i++)
             //    for (int j = 0; j < 2000; j++)
         }
+
+        public Direction AStarTo(Actor _from, Actor _target)
+        {
+            //TODO: proper pathfinding
+            double d_up = Math.Sqrt(Math.Pow(_from.X - _target.X, 2) + Math.Pow(_from.Y - 1 - _target.Y, 2));
+            double d_down = Math.Sqrt(Math.Pow(_from.X - _target.X, 2) + Math.Pow(_from.Y + 1 - _target.Y, 2));
+            double d_left = Math.Sqrt(Math.Pow(_from.X - 1 - _target.X, 2) + Math.Pow(_from.Y - _target.Y, 2));
+            double d_right = Math.Sqrt(Math.Pow(_from.X + 1 - _target.X, 2) + Math.Pow(_from.Y - _target.Y, 2));
+
+            double[] distances = new double[4]{ d_up, d_down, d_left, d_right };
+            Direction[] directions = new Direction[4] { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+            for (int inner = 0; inner < 3; inner++)
+            {
+                for (int outer = inner + 1; outer < 4; outer++)
+                {
+                    if (distances[inner] > distances[outer])
+                    {
+                        double inside = distances[inner];
+                        Direction dir_inside = directions[inner];
+
+                        distances[inner] = distances[outer];
+                        directions[inner] = directions[outer];
+
+                        distances[outer] = inside;
+                        directions[outer] = dir_inside;
+                    }
+                }
+            }
+
+            List<Direction> _choosable_directions = new List<Direction>();
+
+            double closest_move = distances[0];
+            for (int i = 0; i < 4; i++)
+            {
+                if (distances[i] == closest_move)
+                    _choosable_directions.Add(directions[i]);
+            }
+
+            Random rndm = new Random();
+
+            return _choosable_directions[rndm.Next(_choosable_directions.Count)];
+        }
     }
 }
