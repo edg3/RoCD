@@ -215,6 +215,36 @@ namespace RoCD.Game.GameStates
         {
             var ks = Engine.InputService;
 
+            bool can_statup = (player.stat_buypoints > 0); //ignores cost
+            if (can_statup)
+            {
+                if (ks.Keyboard.KeyPress(Keys.D1))
+                {
+                    player.increaseStat(Creature.INT);
+                    player.updateSecondary_INT();
+                }
+                else if (ks.Keyboard.KeyPress(Keys.D2))
+                {
+                    player.increaseStat(Creature.DEX);
+                    player.updateSecondary_DEX();
+                }
+                else if (ks.Keyboard.KeyPress(Keys.D3))
+                {
+                    player.increaseStat(Creature.VIT);
+                    player.updateSecondary_VIT();
+                }
+                else if (ks.Keyboard.KeyPress(Keys.D4))
+                {
+                    player.increaseStat(Creature.AGI);
+                    player.updateSecondary_AGI();
+                }
+                else if (ks.Keyboard.KeyPress(Keys.D5))
+                {
+                    player.increaseStat(Creature.STR);
+                    player.updateSecondary_STR();
+                }
+            }
+
             if (count <= 0)
             {
                 bool moved = false;
@@ -356,6 +386,17 @@ namespace RoCD.Game.GameStates
             }
 
             ShowInfo("m." + ((int)(Engine.InputService.Mouse.Position().X/12)).ToString() + "." + ((int)(Engine.InputService.Mouse.Position().Y/12)).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(0, 39 * 12, 12, 12));
+
+            bool can_statup = (player.stat_buypoints > 0); //ignores cost
+
+            ShowInfo(" health " + player.get(Creature.CURRHP).ToString() + " of " + player.get(Creature.MAXHP), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 1, 12, 12));
+            ShowInfo(" mana   " + player.get(Creature.CURRSP).ToString() + " of " + player.get(Creature.MAXSP), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 2, 12, 12));
+
+            ShowInfo((can_statup ? "1" : " ") + " int " + player.get(Creature.INT).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 4, 12, 12));
+            ShowInfo((can_statup ? "2" : " ") + " dex " + player.get(Creature.DEX).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 5, 12, 12));
+            ShowInfo((can_statup ? "3" : " ") + " vit " + player.get(Creature.VIT).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 6, 12, 12));
+            ShowInfo((can_statup ? "4" : " ") + " agi " + player.get(Creature.AGI).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 7, 12, 12));
+            ShowInfo((can_statup ? "5" : " ") + " str " + player.get(Creature.STR).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 8, 12, 12));
         }
 
         private void ShowInfo(Actor actor, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)

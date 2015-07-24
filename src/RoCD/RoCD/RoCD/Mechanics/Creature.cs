@@ -30,9 +30,9 @@ namespace RoCD.Mechanics
             updateSecondary_INT();
             //updateSecondary_LUK();
 
-            set(CURRHP, get(MAXHP));
-            set(CURRSP, get(MAXSP));
-
+            stats[CURRHP] = stats[MAXHP];
+            stats[CURRSP] = stats[MAXSP];
+            
             stat_buypoints = 20;
         }
 
@@ -69,7 +69,7 @@ namespace RoCD.Mechanics
 
         ushort exp_next_base;
 
-        ushort stat_buypoints;
+        public ushort stat_buypoints;
 
         public const int totalStats = 25;
         int[] stats = new int[totalStats];
@@ -119,7 +119,7 @@ namespace RoCD.Mechanics
             stats[MAXSP] = 6 * get(BLVL) + 4 * get(INT); //TODO proper formula
             //TODO: this should only apply to levelling up
             //float currentSPPercentage = (float)((get(CURRSP)) / get(MAXSP));
-            stats[CURRSP] = stats[MAXSP];
+            //stats[CURRSP] = stats[MAXSP];
             stats[MATK] = (int)(get(BLVL) / 4.0 + get(INT));
         }
 
@@ -141,7 +141,7 @@ namespace RoCD.Mechanics
             stats[MAXHP] = 10 * get(BLVL) + 5 * get(VIT); //TODO proper formula?
             //TODO: this is only on levelup
             //float currentHPPercentage = (float)((get(CURRHP)) / get(MAXHP)); //Scale up the new current HP to be the same percentage after the max HP increase
-            stats[CURRHP] = (int)(/*currentHPPercentage * */ get(MAXHP));
+            //stats[CURRHP] = (int)(/*currentHPPercentage * */ get(MAXHP));
         }
 
         public void updateSecondary_STR()
