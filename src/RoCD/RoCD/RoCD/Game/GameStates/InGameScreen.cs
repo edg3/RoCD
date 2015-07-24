@@ -354,6 +354,8 @@ namespace RoCD.Game.GameStates
                     ShowInfo(lst[i], Engine.SpriteBatch, SpriteSheet, new Rectangle((39) * 12, (37 - i) * 12, 12, 12));
                 }
             }
+
+            ShowInfo("m." + ((int)(Engine.InputService.Mouse.Position().X/12)).ToString() + "." + ((int)(Engine.InputService.Mouse.Position().Y/12)).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(0, 39 * 12, 12, 12));
         }
 
         private void ShowInfo(Actor actor, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
