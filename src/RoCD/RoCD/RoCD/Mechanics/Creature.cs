@@ -158,6 +158,13 @@ namespace RoCD.Mechanics
 
         public int meleeAttack(Creature other)
         {
+            int chance_to_hit = 80 + get(HIT) - other.get(DODGE);
+            if (RoCDRndm.Next(100) > chance_to_hit)
+            {
+                CombatLog.Log(Identity + " missed " + other.Identity);
+                return 0;
+            }
+
             int baseDamage = this.get(ATK) /*+ meleeWeapon->damage()*/; //ATK + weapon
             int finalDamage = (int)((baseDamage * other.get(HARDDEF)) / 100.0 - other.get(SOFTDEF)); //HARDDEF is percentage reduction, SOFTDEF is subtracted
             if (finalDamage < 1)

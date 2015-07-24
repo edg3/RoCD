@@ -79,6 +79,7 @@
     <Compile Include="Helpers\Boxes\BoxedInt.cs" />
     <Compile Include="Helpers\Boxes\IAmABox.cs" />
     <Compile Include="Helpers\CombatLog.cs" />
+    <Compile Include="Helpers\RoCDRndm.cs" />
     <Compile Include="Helpers\TileFactory.cs" />
     <Compile Include="Helpers\SpritesheetHelper.cs" />
     <Compile Include="Helpers\Tiles\Map.cs" />

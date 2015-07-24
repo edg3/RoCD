@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoCD.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,6 @@ namespace RoCD.Mechanics.AI.Agents
 
         public void RunAI(Actor _agent_on, Helpers.Tiles.Map _map, Actor _target)
         {
-            Random rndm = new Random();
             if (agressive)
             {
                 _map.MoveActor(_agent_on, _map.AStarTo(_agent_on, _target));
@@ -26,7 +26,7 @@ namespace RoCD.Mechanics.AI.Agents
             else
             {
                 //Chance to roam
-                if (rndm.Next(100) < ChanceToRoam)
+                if (RoCDRndm.Next(100) < ChanceToRoam)
                 {
                     _map.MoveActor(_agent_on, Helpers.Tiles.Map.Direction.Random);
                 }

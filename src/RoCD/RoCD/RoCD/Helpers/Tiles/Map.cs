@@ -44,8 +44,6 @@ namespace RoCD.Helpers.Tiles
                 }
             }
 
-            Random rndm = new Random();
-
             //PCG:
             //place 8 cities
             List<Vector2> _cPathA = new List<Vector2>();
@@ -59,8 +57,8 @@ namespace RoCD.Helpers.Tiles
 
                 while (tooClose)
                 {
-                    pnt.X = rndm.Next(100, MapWidth - 100);
-                    pnt.Y = rndm.Next(100, MapHeight - 100);
+                    pnt.X = RoCDRndm.Next(100, MapWidth - 100);
+                    pnt.Y = RoCDRndm.Next(100, MapHeight - 100);
 
                     tooClose = false;
                     foreach (var pnt2 in _cities)
@@ -81,7 +79,7 @@ namespace RoCD.Helpers.Tiles
                 _cities.Add(pnt);
 
                 //Fill city temporarily
-                int size = rndm.Next(CitySmall, CityLarge);
+                int size = RoCDRndm.Next(CitySmall, CityLarge);
                 for (int q = (int)(pnt.X - size / 2); q < (int)(pnt.X + size / 2); q++)
                 {
                     for (int r = (int)(pnt.Y - size / 2); r < (int)(pnt.Y + size / 2); r++)
@@ -117,7 +115,7 @@ namespace RoCD.Helpers.Tiles
                 var pA = _cPathA[p];
                 var pB = _cPathB[p];
 
-                int favour = rndm.Next(2);
+                int favour = RoCDRndm.Next(2);
                 switch (favour)
                 {
                     case 0:
@@ -135,7 +133,7 @@ namespace RoCD.Helpers.Tiles
                             int r_q = 4;
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = (int)(pA.X - r_q); r < pA.X + r_q; r++)
                                     _map[r, q] = (_map[r, q].Pathable == true ? _map[r, q] : TileFactory.Path());
@@ -150,7 +148,7 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = (int)(pB.X - r_q); r < pB.X + r_q; r++)
                                     _map[r, q] = (_map[r, q].Pathable == true ? _map[r, q] : TileFactory.Path());
@@ -165,7 +163,7 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = m_y - r_q; r < m_y + r_q; r++)
                                 {
@@ -188,7 +186,7 @@ namespace RoCD.Helpers.Tiles
                             int r_q = 4;
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = (int)(pA.Y - r_q); r < pA.Y + r_q; r++)
                                     _map[q, r] = (_map[q, r].Pathable == true ? _map[q, r] : TileFactory.Path());
@@ -203,7 +201,7 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = (int)(pB.Y - r_q); r < pB.Y + r_q; r++)
                                     _map[q, r] = (_map[q, r].Pathable == true ? _map[q, r] : TileFactory.Path());
@@ -218,7 +216,7 @@ namespace RoCD.Helpers.Tiles
                             }
                             for (int q = q_a; q < q_b; q++)
                             {
-                                r_q += rndm.Next(3) - 1;
+                                r_q += RoCDRndm.Next(3) - 1;
                                 r_q = (int)MathHelper.Clamp(r_q, 4, 8);
                                 for (int r = m_x - r_q; r < m_x + r_q; r++)
                                 {
@@ -233,7 +231,7 @@ namespace RoCD.Helpers.Tiles
             List<Point> Connections = new List<Point>();
             for (int i = 0; i < WorldBlotches; i++)
             {
-                Connections.Add(new Point(rndm.Next(100, Map.MapWidth - 100), rndm.Next(100, Map.MapHeight - 100)));
+                Connections.Add(new Point(RoCDRndm.Next(100, Map.MapWidth - 100), RoCDRndm.Next(100, Map.MapHeight - 100)));
             }
 
             Connections = (from item in Connections
@@ -242,7 +240,7 @@ namespace RoCD.Helpers.Tiles
 
             foreach (var pnt in Connections)
             {
-                int r = rndm.Next(WorldBlotchMin, WorldBlotchMax);
+                int r = RoCDRndm.Next(WorldBlotchMin, WorldBlotchMax);
                 for (int i = pnt.X - r; i < pnt.X + r; i++)
                 {
                     for (int j = pnt.Y - r; j < pnt.Y + r; j++)
@@ -264,7 +262,7 @@ namespace RoCD.Helpers.Tiles
                 {
                     if (_map[i,j].RenderInfo.BackColor == Color.Red)
                     {
-                        FloodFillFeature(i, j, rndm);
+                        FloodFillFeature(i, j);
                     }
                 }
             }
@@ -272,12 +270,12 @@ namespace RoCD.Helpers.Tiles
             //Add in 5000 spawners:
             for (int i = 0; i < SpawnerCount; i++)
             {
-                int q = rndm.Next(MapWidth);
-                int r = rndm.Next(MapHeight);
+                int q = RoCDRndm.Next(MapWidth);
+                int r = RoCDRndm.Next(MapHeight);
                 while (_map[q,r].Pathable == false)
                 {
-                    q = rndm.Next(MapWidth);
-                    r = rndm.Next(MapHeight);
+                    q = RoCDRndm.Next(MapWidth);
+                    r = RoCDRndm.Next(MapHeight);
                 }
 
                 _map[q, r].Contained = new Spawner { X = q, Y = r};
@@ -285,7 +283,7 @@ namespace RoCD.Helpers.Tiles
             }
         }
 
-        private void FloodFillFeature(int i, int j, Random rndm)
+        private void FloodFillFeature(int i, int j)
         {
             //int chosen = rndm.Next(99);
             //if (chosen < 75)
@@ -437,7 +435,7 @@ namespace RoCD.Helpers.Tiles
                 case Direction.Up: n_x = toMove.X; n_y = toMove.Y - 1; tileTo = this[toMove.X, toMove.Y - 1]; distanceMoved = 1; break;
                 case Direction.UpLeft: n_x = toMove.X - 1; n_y = toMove.Y - 1; tileTo = this[toMove.X - 1, toMove.Y - 1]; distanceMoved = 1.4142d; break;
                 case Direction.UpRight: n_x = toMove.X + 1; n_y = toMove.Y - 1; tileTo = this[toMove.X + 1, toMove.Y - 1]; distanceMoved = 1.4142d; break;
-                case Direction.Random: Random rndm = new Random(); n_x = toMove.X + rndm.Next(3) - 1; n_y = toMove.Y + rndm.Next(3) - 1; tileTo = this[n_x, n_y]; distanceMoved = 1.4142d; break;
+                case Direction.Random: n_x = toMove.X + RoCDRndm.Next(3) - 1; n_y = toMove.Y + RoCDRndm.Next(3) - 1; tileTo = this[n_x, n_y]; distanceMoved = 1.4142d; break;
             }
 
             if (tileTo != null)
@@ -523,9 +521,7 @@ namespace RoCD.Helpers.Tiles
                     _choosable_directions.Add(directions[i]);
             }
 
-            Random rndm = new Random();
-
-            return _choosable_directions[rndm.Next(_choosable_directions.Count)];
+            return _choosable_directions[RoCDRndm.Next(_choosable_directions.Count)];
         }
     }
 }

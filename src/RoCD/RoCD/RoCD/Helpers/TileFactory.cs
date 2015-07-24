@@ -9,7 +9,6 @@ namespace RoCD.Helpers
 {
     class TileFactory
     {
-        private static Random rnd = new Random();
 
         private static Color[] col_GrassBack = new Color[] { new Color(56, 75, 0), new Color(47, 74, 0), new Color(83, 119, 0), new Color(0, 74, 0) };
         private static Color[] col_GrassFront = new Color[] { new Color(0, 119, 0), new Color(77, 164, 77), new Color(79, 164, 0) };
@@ -17,14 +16,14 @@ namespace RoCD.Helpers
 
         public static Tile Grass()
         {
-            Point p = til_GrassTiles[rnd.Next(til_GrassTiles.Length)];
+            Point p = til_GrassTiles[RoCDRndm.Next(til_GrassTiles.Length)];
             Tile t = new Tile()
             {
                 Pathable = true,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColor = col_GrassBack[rnd.Next(col_GrassBack.Length)],
-                    TileColor = col_GrassFront[rnd.Next(col_GrassFront.Length)],
+                    BackColor = col_GrassBack[RoCDRndm.Next(col_GrassBack.Length)],
+                    TileColor = col_GrassFront[RoCDRndm.Next(col_GrassFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }
@@ -39,14 +38,14 @@ namespace RoCD.Helpers
 
         public static Tile Dirt()
         {
-            Point p = til_DirtTiles[rnd.Next(til_DirtTiles.Length)];
+            Point p = til_DirtTiles[RoCDRndm.Next(til_DirtTiles.Length)];
             Tile t = new Tile()
             {
                 Pathable = true,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColor = col_DirtBack[rnd.Next(col_DirtBack.Length)],
-                    TileColor = col_DirtFront[rnd.Next(col_DirtFront.Length)],
+                    BackColor = col_DirtBack[RoCDRndm.Next(col_DirtBack.Length)],
+                    TileColor = col_DirtFront[RoCDRndm.Next(col_DirtFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }
@@ -61,14 +60,14 @@ namespace RoCD.Helpers
 
         public static Tile Water()
         {
-            Point p = til_WaterTiles[rnd.Next(til_WaterTiles.Length)];
+            Point p = til_WaterTiles[RoCDRndm.Next(til_WaterTiles.Length)];
             Tile t = new Tile()
             {
                 Pathable = false,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColor = col_WaterBack[rnd.Next(col_WaterBack.Length)],
-                    TileColor = col_WaterFront[rnd.Next(col_WaterFront.Length)],
+                    BackColor = col_WaterBack[RoCDRndm.Next(col_WaterBack.Length)],
+                    TileColor = col_WaterFront[RoCDRndm.Next(col_WaterFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }
@@ -103,14 +102,14 @@ namespace RoCD.Helpers
 
         public static Tile Path()
         {
-            Point p = til_PathTiles[rnd.Next(til_PathTiles.Length)];
+            Point p = til_PathTiles[RoCDRndm.Next(til_PathTiles.Length)];
             Tile t = new Tile()
             {
                 Pathable = true,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColor = col_PathBack[rnd.Next(col_PathBack.Length)],
-                    TileColor = col_PathFront[rnd.Next(col_PathFront.Length)],
+                    BackColor = col_PathBack[RoCDRndm.Next(col_PathBack.Length)],
+                    TileColor = col_PathFront[RoCDRndm.Next(col_PathFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }
@@ -125,14 +124,14 @@ namespace RoCD.Helpers
 
         public static Tile Tree()
         {
-            Point p = til_TreeTiles[rnd.Next(til_TreeTiles.Length)];
+            Point p = til_TreeTiles[RoCDRndm.Next(til_TreeTiles.Length)];
             Tile t = new Tile()
             {
                 Pathable = false,
                 RenderInfo = new TileRenderInfo()
                 {
-                    BackColor = col_TreeBack[rnd.Next(col_TreeBack.Length)],
-                    TileColor = col_TreeFront[rnd.Next(col_TreeFront.Length)],
+                    BackColor = col_TreeBack[RoCDRndm.Next(col_TreeBack.Length)],
+                    TileColor = col_TreeFront[RoCDRndm.Next(col_TreeFront.Length)],
                     TileX = (byte)p.X,
                     TileY = (byte)p.Y
                 }
