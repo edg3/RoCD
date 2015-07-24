@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RoCD.Helpers;
 using RoCD.Helpers.Tiles;
 using RoCD.Mechanics.Factories;
 using System;
@@ -39,6 +40,8 @@ namespace RoCD.Mechanics
                         _map[X - 1, Y].Contained.Y = Y;
                         _map.registeredActors.Add(_map[X - 1, Y].Contained);
                         hasSpawned = true;
+
+                        CombatLog.Log("- a " + _map[X - 1, Y].Contained.Identity + " appears");
                     }
                 }
             }

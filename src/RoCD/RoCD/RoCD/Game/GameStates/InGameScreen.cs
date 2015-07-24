@@ -12,6 +12,7 @@ using System.Text;
 using RapidXNA;
 using RapidXNA.Models;
 using System.IO;
+using RoCD.Mechanics.AI.Agents;
 
 namespace RoCD.Game.GameStates
 {
@@ -217,50 +218,59 @@ namespace RoCD.Game.GameStates
             if (count <= 0)
             {
                 bool moved = false;
+                Actor atPos = null;
                 if (ks.Keyboard.KeyHeld(Keys.Right) || ks.Keyboard.KeyHeld(Keys.D))
                 {
-                    _map.MoveActor(player, Map.Direction.Right);
+                    atPos = _map.MoveActor(player, Map.Direction.Right);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.Left) || ks.Keyboard.KeyHeld(Keys.A))
                 {
-                    _map.MoveActor(player, Map.Direction.Left);
+                    atPos = _map.MoveActor(player, Map.Direction.Left);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.Up) || ks.Keyboard.KeyHeld(Keys.W))
                 {
-                    _map.MoveActor(player, Map.Direction.Up);
+                    atPos = _map.MoveActor(player, Map.Direction.Up);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.Down) || ks.Keyboard.KeyHeld(Keys.S))
                 {
-                    _map.MoveActor(player, Map.Direction.Down);
+                    atPos = _map.MoveActor(player, Map.Direction.Down);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.Q))
                 {
-                    _map.MoveActor(player, Map.Direction.UpLeft);
+                    atPos = _map.MoveActor(player, Map.Direction.UpLeft);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.E))
                 {
-                    _map.MoveActor(player, Map.Direction.UpRight);
+                    atPos = _map.MoveActor(player, Map.Direction.UpRight);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.Z))
                 {
-                    _map.MoveActor(player, Map.Direction.DownLeft);
+                    atPos = _map.MoveActor(player, Map.Direction.DownLeft);
                     moved = true;
                 }
                 if (ks.Keyboard.KeyHeld(Keys.C))
                 {
-                    _map.MoveActor(player, Map.Direction.DownRight);
+                    atPos = _map.MoveActor(player, Map.Direction.DownRight);
                     moved = true;
                 }
 
                 if (moved)
                 {
                     count += 128;
+                    if (null != atPos)
+                    {
+                        if (atPos is Creature)
+                        {
+                            player.meleeAttack(atPos as Creature);
+                            ((atPos as Creature).AIAgent as PassiveEnemyAgent).agressive = true;
+                        }
+                    }
                     _map.Update(player);
                 }
             }
@@ -333,15 +343,40 @@ namespace RoCD.Game.GameStates
                     }
                 }
             }
+
+            //render log
+            var lst = CombatLog.Get();
+            if (lst.Count > 0)
+            {
+                for (int i = 0; i < lst.Count; i++)
+                {
+                    //X 39, Y 32
+                    ShowInfo(lst[i], Engine.SpriteBatch, SpriteSheet, new Rectangle((39) * 12, (37 - i) * 12, 12, 12));
+                }
+            }
         }
 
         private void ShowInfo(Actor actor, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
         {
-            for (int i = 0; i < actor.Identity.Length; i++)
+            ShowInfo(actor.Identity, spriteBatch, SpriteSheet, target);
+            //for (int i = 0; i < actor.Identity.Length; i++)
+            //{
+            //    Point tl = GetCharacterPoint(actor.Identity[i]);
+            //    TileRenderInfo bti = new TileRenderInfo { TileColor = Color.Black, TileX = 11, TileY = 13 };
+            //    TileRenderInfo ti = new TileRenderInfo { TileColor = Color.White, TileX = (byte)tl.X, TileY = (byte)tl.Y };
+            //    SpritesheetHelper.RenderTile(bti, spriteBatch, _spriteSheet, target);
+            //    SpritesheetHelper.RenderTile(ti, spriteBatch, _spriteSheet, target);
+            //    target = new Rectangle(target.X + 12, target.Y, target.Width, target.Height);
+            //}
+        }
+
+        private void ShowInfo(string message, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
+        {
+            for (int i = 0; i < message.Length; i++)
             {
-                Point tl = GetCharacterPoint(actor.Identity[i]);
-                TileRenderInfo bti = new TileRenderInfo { TileColor = Color.Black, TileX = 11, TileY = 13};
-                TileRenderInfo ti = new TileRenderInfo { TileColor = Color.White, TileX = (byte)tl.X, TileY = (byte)tl.Y};
+                Point tl = GetCharacterPoint(message[i]);
+                TileRenderInfo bti = new TileRenderInfo { TileColor = Color.Black, TileX = 11, TileY = 13 };
+                TileRenderInfo ti = new TileRenderInfo { TileColor = Color.White, TileX = (byte)tl.X, TileY = (byte)tl.Y };
                 SpritesheetHelper.RenderTile(bti, spriteBatch, _spriteSheet, target);
                 SpritesheetHelper.RenderTile(ti, spriteBatch, _spriteSheet, target);
                 target = new Rectangle(target.X + 12, target.Y, target.Width, target.Height);
@@ -352,33 +387,47 @@ namespace RoCD.Game.GameStates
         {
             switch (p)
             {
-                case 'a': return new Point(1, 6); 
-                case 'b': return new Point(2, 6); 
-                case 'c': return new Point(3, 6); 
-                case 'd': return new Point(4, 6); 
-                case 'e': return new Point(5, 6); 
-                case 'f': return new Point(6, 6); 
-                case 'g': return new Point(7, 6); 
-                case 'h': return new Point(8, 6); 
-                case 'i': return new Point(9, 6); 
-                case 'j': return new Point(10, 6); 
-                case 'k': return new Point(11, 6); 
-                case 'l': return new Point(12, 6); 
-                case 'm': return new Point(13, 6); 
-                case 'n': return new Point(14, 6); 
-                case 'o': return new Point(15, 6); 
+                case 'a': return new Point(1, 6);
+                case 'b': return new Point(2, 6);
+                case 'c': return new Point(3, 6);
+                case 'd': return new Point(4, 6);
+                case 'e': return new Point(5, 6);
+                case 'f': return new Point(6, 6);
+                case 'g': return new Point(7, 6);
+                case 'h': return new Point(8, 6);
+                case 'i': return new Point(9, 6);
+                case 'j': return new Point(10, 6);
+                case 'k': return new Point(11, 6);
+                case 'l': return new Point(12, 6);
+                case 'm': return new Point(13, 6);
+                case 'n': return new Point(14, 6);
+                case 'o': return new Point(15, 6);
 
-                case 'p': return new Point(0, 7); 
-                case 'q': return new Point(1, 7); 
-                case 'r': return new Point(2, 7); 
-                case 's': return new Point(3, 7); 
-                case 't': return new Point(4, 7); 
-                case 'u': return new Point(5, 7); 
-                case 'v': return new Point(6, 7); 
-                case 'w': return new Point(7, 7); 
-                case 'x': return new Point(8, 7); 
-                case 'y': return new Point(9, 7); 
+                case 'p': return new Point(0, 7);
+                case 'q': return new Point(1, 7);
+                case 'r': return new Point(2, 7);
+                case 's': return new Point(3, 7);
+                case 't': return new Point(4, 7);
+                case 'u': return new Point(5, 7);
+                case 'v': return new Point(6, 7);
+                case 'w': return new Point(7, 7);
+                case 'x': return new Point(8, 7);
+                case 'y': return new Point(9, 7);
                 case 'z': return new Point(10, 7);
+
+                case '0': return new Point(0, 3);
+                case '1': return new Point(1, 3);
+                case '2': return new Point(2, 3);
+                case '3': return new Point(3, 3);
+                case '4': return new Point(4, 3);
+                case '5': return new Point(5, 3);
+                case '6': return new Point(6, 3);
+                case '7': return new Point(7, 3);
+                case '8': return new Point(8, 3);
+                case '9': return new Point(9, 3);
+
+                case '.': return new Point(14, 2);
+                case '-': return new Point(15, 0);
             }
 
             return new Point(0, 2);

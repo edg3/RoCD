@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoCD.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,9 @@ namespace RoCD.Mechanics
             updateSecondary_DEX();
             updateSecondary_INT();
             //updateSecondary_LUK();
+
+            set(CURRHP, get(MAXHP));
+            set(CURRSP, get(MAXSP));
 
             stat_buypoints = 20;
         }
@@ -113,7 +117,9 @@ namespace RoCD.Mechanics
         public void updateSecondary_INT()
         {
             stats[MAXSP] = 6 * get(BLVL) + 4 * get(INT); //TODO proper formula
-            float currentSPPercentage = (float)((get(CURRSP)) / get(MAXSP));
+            //TODO: this should only apply to levelling up
+            //float currentSPPercentage = (float)((get(CURRSP)) / get(MAXSP));
+            stats[CURRSP] = stats[MAXSP];
             stats[MATK] = (int)(get(BLVL) / 4.0 + get(INT));
         }
 
@@ -133,8 +139,9 @@ namespace RoCD.Mechanics
         {
             stats[SOFTDEF] = get(VIT);
             stats[MAXHP] = 10 * get(BLVL) + 5 * get(VIT); //TODO proper formula?
-            float currentHPPercentage = (float)((get(CURRHP)) / get(MAXHP)); //Scale up the new current HP to be the same percentage after the max HP increase
-            stats[CURRHP] = (int)(currentHPPercentage * get(MAXHP));
+            //TODO: this is only on levelup
+            //float currentHPPercentage = (float)((get(CURRHP)) / get(MAXHP)); //Scale up the new current HP to be the same percentage after the max HP increase
+            stats[CURRHP] = (int)(/*currentHPPercentage * */ get(MAXHP));
         }
 
         public void updateSecondary_STR()
@@ -159,6 +166,8 @@ namespace RoCD.Mechanics
             }
             other.takeDamage(finalDamage);
 
+            CombatLog.Log(Identity + " hit " + other.Identity + " for " + finalDamage.ToString());
+
             //tmp
             return 0;
         }
@@ -173,7 +182,7 @@ namespace RoCD.Mechanics
             return (stats[CURRHP] == 0);
         }
 
-        void set(int stat, int value)
+        public void set(int stat, int value)
         {
             if ((stat > Creature.LUK) || (stat < 0))
             {
@@ -202,5 +211,6 @@ namespace RoCD.Mechanics
             }
 
         }
+
     }
 }

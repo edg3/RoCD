@@ -19,7 +19,8 @@ namespace RoCD.Mechanics.AI.Agents
                 _map.MoveActor(_agent_on, _map.AStarTo(_agent_on, _target));
                 if (Math.Sqrt(Math.Pow(_agent_on.X - _target.X, 2) + Math.Pow(_agent_on.Y - _target.Y, 2)) < 1.5)
                 {
-                    //Attack Player!
+                    //Attack target!
+                    (_agent_on as Creature).meleeAttack(_target as Creature);
                 }
             }
             else

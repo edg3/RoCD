@@ -417,7 +417,7 @@ namespace RoCD.Helpers.Tiles
         /// <param name="toMove"></param>
         /// <param name="direction"></param>
         /// <returns>Distance moved.</returns>
-        public double MoveActor(Actor toMove, Direction direction)
+        public Actor MoveActor(Actor toMove, Direction direction)
         {
             var tileAt = this[toMove.X, toMove.Y];
             Tile tileTo = null;
@@ -450,11 +450,13 @@ namespace RoCD.Helpers.Tiles
                     toMove.X = n_x;
                     toMove.Y = n_y;
 
-                    return distanceMoved;
+                    return null;
                 }
             }
 
-            return 0;
+            if (tileTo.Contained != null) return tileTo.Contained;
+
+            return null;
         }
 
         public List<Actor> registeredActors = new List<Actor>();
@@ -466,6 +468,19 @@ namespace RoCD.Helpers.Tiles
             {
                 var item = registeredActors[i];
                 item.Update(this, player);
+                if (item is Creature)
+                {
+                    if (item != player)
+                    {
+                        if ((item as Creature).get(Creature.CURRHP) <= 0)
+                        {
+                            //remove, dead!
+                            var i_temp = item;
+                            registeredActors.Remove(item);
+                            _map[i_temp.X, i_temp.Y].Contained = null;
+                        }
+                    }
+                }
             }
             //for (int i = 0; i < 2000; i++)
             //    for (int j = 0; j < 2000; j++)
