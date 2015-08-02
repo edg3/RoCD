@@ -478,6 +478,7 @@ namespace RoCD.Helpers.Tiles
                         if ((item as Creature).get(Creature.CURRHP) <= 0)
                         {
                             //remove, dead!
+                            //NOTE: DO NOT GENERATE LOOT HERE
                             var i_temp = item;
                             registeredActors.Remove(item);
                             _map[i_temp.X, i_temp.Y].Contained = null;
