@@ -302,11 +302,23 @@ namespace RoCD.Game.GameStates
                         }
                     }
                     _map.Update(player);
+                    player.regenerate();
                 }
             }
             else if (count > 0)
             {
                 count -= gameTime.ElapsedGameTime.Milliseconds;
+            }
+
+            if (ks.Keyboard.KeyPress(Keys.R))
+            {
+                int playerHealth = player.get(Creature.CURRHP);
+                while (((player.get(Creature.CURRHP) < player.get(Creature.MAXHP)) || (player.get(Creature.CURRSP) < player.get(Creature.MAXSP))) && (playerHealth <= player.get(Creature.CURRHP)))
+                {
+                    playerHealth = player.get(Creature.CURRHP);
+                    player.regenerate();
+                    _map.Update(player);
+                }
             }
 
             if (ks.Keyboard.KeyHeld(Keys.LeftAlt))
