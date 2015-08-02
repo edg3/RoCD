@@ -32,7 +32,7 @@ namespace RoCD.Mechanics
 
             stats[CURRHP] = stats[MAXHP];
             stats[CURRSP] = stats[MAXSP];
-            
+
             stat_buypoints = 20;
         }
 
@@ -121,7 +121,7 @@ namespace RoCD.Mechanics
 
         public void updateSecondary_INT()
         {
-            CombatLog.GameLog("Creature:" + Identity + " int stats changing from: MAXSP="+ stats[MAXSP].ToString() +"; MATK=" + stats[MATK].ToString());
+            CombatLog.GameLog("Creature:" + Identity + " int stats changing from: MAXSP=" + stats[MAXSP].ToString() + "; MATK=" + stats[MATK].ToString());
 
             stats[MAXSP] = 6 * get(BLVL) + 4 * get(INT); //TODO proper formula
             //TODO: this should only apply to levelling up
@@ -200,13 +200,13 @@ namespace RoCD.Mechanics
             if (!critical)
             {
                 //softdef only applies when not a critical
-                finalDamage -= (int)(other.get(SOFTDEF) + RoCDRndm.NextDouble() * (other.get(VIT) * -0.3 + Math.Max(other.get(VIT) * 0.4, Math.Pow(other.get(VIT),2)/150 - 1)) + other.get(VIT)/0.3);
+                finalDamage -= (int)(other.get(SOFTDEF) + RoCDRndm.NextDouble() * (other.get(VIT) * -0.3 + Math.Max(other.get(VIT) * 0.4, Math.Pow(other.get(VIT), 2) / 150 - 1)) + other.get(VIT) / 0.3);
                 //Soft DEF for players is equal to [VIT*0.5] + rnd([VIT*0.3], max([VIT*0.3],[VIT^2/150]-1)).
                 //Soft DEF for monsters is equal to VIT + rnd(0,[VIT/20]^2-1).
             }
-            
+
             //apply skill and type reduction/increases
-            
+
             //(int)((baseDamage * other.get(HARDDEF)) / 100.0 - other.get(SOFTDEF)); //HARDDEF is percentage reduction, SOFTDEF is subtracted
             CombatLog.GameLog("Creature:" + Identity + " damage calc: ATK=" + get(ATK).ToString() + "; other.HA");
             if (finalDamage < 1)
@@ -215,7 +215,7 @@ namespace RoCD.Mechanics
             }
             other.takeDamage(finalDamage);
 
-            CombatLog.GameLog("Creature:" +Identity + " hit " + other.Identity + " for " + finalDamage.ToString());
+            CombatLog.GameLog("Creature:" + Identity + " hit " + other.Identity + " for " + finalDamage.ToString());
 
             //tmp
             return 0;
@@ -240,7 +240,7 @@ namespace RoCD.Mechanics
             }
             else
             {
-                if (value <= 0)
+                if (value < 0)
                 {
                     //std::cerr << "Base stats can not be smaller than 1" << std::endl;
                 }
