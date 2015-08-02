@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -32,6 +33,14 @@ namespace RoCD.Helpers
         public static List<string> GetAll()
         {
             return _log;
+        }
+
+        public static void GameLog(string message)
+        {
+            using (var sw = new StreamWriter("game.log", true))
+            {
+                sw.WriteLine(message);
+            }
         }
     }
 }

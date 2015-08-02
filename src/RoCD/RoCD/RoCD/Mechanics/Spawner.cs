@@ -42,12 +42,14 @@ namespace RoCD.Mechanics
                         hasSpawned = true;
 
                         CombatLog.Log("- a " + _map[X - 1, Y].Contained.Identity + " appears");
+                        CombatLog.GameLog("Spawner:a " + _map[X - 1, Y].Contained.Identity + " {" + "" + "} was spawned in world at (" + (X - 1).ToString() + "," + (Y).ToString() + ")");
                     }
                 }
             }
             else if (Math.Sqrt(Math.Pow(_player.X - X, 2) + Math.Pow(_player.Y - Y, 2)) > 32)
             {
                 hasSpawned = false;
+                CombatLog.GameLog("Spawner:spawner at (" + X.ToString() + "," + Y.ToString() + ") is now allowed to respawn");
             }
         }
     }

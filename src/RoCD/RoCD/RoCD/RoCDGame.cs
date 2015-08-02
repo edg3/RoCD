@@ -59,6 +59,10 @@ namespace RoCD
             // TODO: use this.Content to load your game content here
             var gs = new InGameScreen();
             _engine = new RapidEngine(this, GraphicsDevice, Content, gs);
+
+            CombatLog.GameLog("====================================================\n\n\n");
+            CombatLog.GameLog(DateTime.Now.ToShortDateString() + " / " + DateTime.Now.ToShortTimeString());
+            CombatLog.GameLog("RoCDGame:Initialized new game.");
         }
 
         /// <summary>
