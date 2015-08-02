@@ -13,6 +13,7 @@ using RoCD.Helpers.Tiles;
 using RoCD.Mechanics;
 using RapidXNA;
 using RoCD.Game.GameStates;
+using System.IO;
 
 namespace RoCD
 {
@@ -59,6 +60,9 @@ namespace RoCD
             // TODO: use this.Content to load your game content here
             var gs = new InGameScreen();
             _engine = new RapidEngine(this, GraphicsDevice, Content, gs);
+
+            //For now remove existing combat log:
+            if (File.Exists("game.log")) File.Delete("game.log");
 
             CombatLog.GameLog("====================================================\n\n\n");
             CombatLog.GameLog(DateTime.Now.ToShortDateString() + " / " + DateTime.Now.ToShortTimeString());

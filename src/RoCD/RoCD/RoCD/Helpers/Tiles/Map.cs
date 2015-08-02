@@ -49,6 +49,7 @@ namespace RoCD.Helpers.Tiles
             List<Vector2> _cPathA = new List<Vector2>();
             List<Vector2> _cPathB = new List<Vector2>();
 
+            CombatLog.GameLog("Map:generating city locations");
             _cities = new List<Vector2>();
             for (int i = 0; i < CityCount; i++)
             {
@@ -77,6 +78,7 @@ namespace RoCD.Helpers.Tiles
                 }
 
                 _cities.Add(pnt);
+                CombatLog.GameLog("Map:city placed at " + pnt.ToString());
 
                 //Fill city temporarily
                 int size = RoCDRndm.Next(CitySmall, CityLarge);
@@ -92,7 +94,7 @@ namespace RoCD.Helpers.Tiles
             }
 
             //Chain cities together with a simple pathway:
-            
+            CombatLog.GameLog("Map:making paths between cities");
             for (int p = 0; p < _cities.Count; p++)
             {
                 var pA = _cities[p];
@@ -228,6 +230,7 @@ namespace RoCD.Helpers.Tiles
             }
 
             //build a fully connected and interesting world map
+            CombatLog.GameLog("Map:flooding world with circles (temporary)");
             List<Point> Connections = new List<Point>();
             for (int i = 0; i < WorldBlotches; i++)
             {
@@ -256,6 +259,7 @@ namespace RoCD.Helpers.Tiles
             }
 
             //flood fill the map with structures:
+            CombatLog.GameLog("Map:filling in empty spaces");
             for (int i = 0; i < MapWidth; i++)
             {
                 for (int j = 0; j < MapHeight; j++)
@@ -268,6 +272,7 @@ namespace RoCD.Helpers.Tiles
             }
 
             //Add in 5000 spawners:
+            CombatLog.GameLog("Map:adding spawners");
             for (int i = 0; i < SpawnerCount; i++)
             {
                 int q = RoCDRndm.Next(MapWidth);

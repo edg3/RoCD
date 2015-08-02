@@ -118,9 +118,9 @@ namespace RoCD.Helpers
             return t;
         }
 
-        private static Color[] col_TreeBack = new Color[] { new Color(163, 71, 25), new Color(76, 102, 0), new Color(102, 82, 0) };
-        private static Color[] col_TreeFront = new Color[] { new Color(102, 0, 0), new Color(71, 0, 0), new Color(57, 0, 0) };
-        private static Point[] til_TreeTiles = new Point[] { new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(10, 2) };
+        private static Color[] col_TreeFront = new Color[] { new Color(163, 71, 25), new Color(76, 102, 0), new Color(102, 82, 0) };
+        private static Color[] col_TreeBack = new Color[] { new Color(102, 0, 0), new Color(71, 0, 0), new Color(57, 0, 0) };
+        private static Point[] til_TreeTiles = new Point[] { new Point(11, 1), new Point(10, 1) };
 
         public static Tile Tree()
         {
