@@ -91,6 +91,9 @@
     <Compile Include="Mechanics\AI\IAIAgent.cs" />
     <Compile Include="Mechanics\Creature.cs" />
     <Compile Include="Mechanics\Factories\ActorFactory.cs" />
+    <Compile Include="Mechanics\Items\Inventory.cs" />
+    <Compile Include="Mechanics\Items\Item.cs" />
+    <Compile Include="Mechanics\Items\Weapon.cs" />
     <Compile Include="Mechanics\Spawner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

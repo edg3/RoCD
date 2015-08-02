@@ -1,4 +1,5 @@
 ﻿using RoCD.Helpers;
+using RoCD.Mechanics.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,8 @@ namespace RoCD.Mechanics
 
             stat_buypoints = 20;
         }
+
+        public Inventory inventory;
 
         public const int STR = 0;
         public const int VIT = 1;
