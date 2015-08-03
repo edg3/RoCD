@@ -52,5 +52,38 @@ namespace RoCD.Helpers
 
         public static Color[] GrassBackColor = new Color[3] { new Color(0, 51, 0), new Color(0, 102, 51), new Color(51, 102, 51) };
         public static Color[] GrassForeColor = new Color[3] { new Color(0, 102, 0), new Color(51, 153, 61), new Color(51, 204, 51) };
+
+        static TileRenderInfo ti_alt = new TileRenderInfo()
+        {
+            BackColor = Color.Black,
+            TileColor = Color.White,
+            TileX = 4,
+            TileY = 0
+        };
+
+        internal static void RenderTileAlt(Tile tile, SpriteBatch spriteBatch, Texture2D tex2d, Rectangle target)
+        {
+            ti_alt.BackColor = tile.RenderInfo.BackColor;
+
+            _renderFrom.X = 11 * 12;
+            _renderFrom.Y = 13 * 12;
+
+            spriteBatch.Draw(tex2d, target, _renderFrom, ti_alt.BackColor);
+
+            if (tile.Contained == null)
+            {
+                _renderFrom.X = ti_alt.TileX * 12;
+                _renderFrom.Y = ti_alt.TileY * 12;
+
+                spriteBatch.Draw(tex2d, target, _renderFrom, ti_alt.TileColor);
+            }
+            else
+            {
+                _renderFrom.X = tile.Contained.TileX * 12;
+                _renderFrom.Y = tile.Contained.TileY * 12;
+
+                spriteBatch.Draw(tex2d, target, _renderFrom, tile.Contained.DrawColor);
+            }
+        }
     }
 }

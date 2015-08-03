@@ -13,6 +13,7 @@ using RapidXNA;
 using RapidXNA.Models;
 using System.IO;
 using RoCD.Mechanics.AI.Agents;
+using RoCD.Mechanics.Items;
 
 namespace RoCD.Game.GameStates
 {
@@ -39,6 +40,8 @@ namespace RoCD.Game.GameStates
             player.X = (int)(pnt.X);
             player.Y = (int)(pnt.Y);
             _map[(int)(pnt.X), (int)(pnt.Y)].Contained = player;
+
+            _map[(int)(pnt.X) - 3, (int)(pnt.Y)].items.items.Add(new Weapon() { Name = "Dagger", WeaponATK = 5 });
 
             //TODO: Decent UI stack
             _uiPermanents.Add(new UIRenderInfo()
@@ -333,15 +336,25 @@ namespace RoCD.Game.GameStates
 
         List<UIRenderInfo> _uiPermanents = new List<UIRenderInfo>();
 
+        double altDraw = 0.0;
         public override void Draw(Microsoft.Xna.Framework.GameTime gameTime)
         {
+            altDraw = (altDraw + gameTime.ElapsedGameTime.Milliseconds / 666.0) % 2;
+
             // TODO: Add your drawing code here
             for (int i = player.X - 18; i < player.X + 19; i++)
             {
                 for (int j = player.Y - 18; j < player.Y + 19; j++)
                 {
                     if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
-                    SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                    if (_map[i,j].items.items.Count == 0 || altDraw < 1)
+                    {
+                        SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                    }
+                    else
+                    {
+                        SpritesheetHelper.RenderTileAlt(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                    }
                 }
             }
 

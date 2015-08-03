@@ -1,4 +1,5 @@
 ﻿using RoCD.Mechanics;
+using RoCD.Mechanics.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace RoCD.Helpers.Tiles
         public TileRenderInfo RenderInfo { get; set; }
 
         public Actor Contained { get; set; }
+
+        public Inventory items = new Inventory();
 
     }
 }
