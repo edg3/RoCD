@@ -7,7 +7,7 @@ namespace RoCD.Mechanics.Items
 {
     public class Inventory
     {
-        public List<Item> items = new List<Item>();
+        public List<ItemStack> items = new List<ItemStack>();
 
         public double totalWeight()
         {

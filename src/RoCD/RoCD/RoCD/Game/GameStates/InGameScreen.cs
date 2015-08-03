@@ -35,180 +35,17 @@ namespace RoCD.Game.GameStates
 
             _spriteSheet = Engine.ContentManager.Load<Texture2D>("12x12");
 
+            SpritesheetHelper.Init(Engine.SpriteBatch, _spriteSheet);
+
             var pnt = _map._cities[0];
 
             player.X = (int)(pnt.X);
             player.Y = (int)(pnt.Y);
             _map[(int)(pnt.X), (int)(pnt.Y)].Contained = player;
 
-            _map[(int)(pnt.X) - 3, (int)(pnt.Y)].items.items.Add(new Weapon() { Name = "Dagger", WeaponATK = 5 });
-
-            //TODO: Decent UI stack
-            _uiPermanents.Add(new UIRenderInfo()
-            {
-                RenderInfo = new TileRenderInfo()
-                {
-                    BackColor = Color.Black,
-                    TileColor = Color.White,
-                    TileX = 6,
-                    TileY = 14
-                },
-                X = 0,
-                Y = 0
-            });
-            for (int i = 1; i < 38; i++)
-            {
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 13,
-                        TileY = 12
-                    },
-                    X = i,
-                    Y = 0
-                });
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 13,
-                        TileY = 12
-                    },
-                    X = i,
-                    Y = 38
-                });
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 10,
-                        TileY = 11
-                    },
-                    X = 0,
-                    Y = i
-                });
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 10,
-                        TileY = 11
-                    },
-                    X = 38,
-                    Y = i
-                });
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 10,
-                        TileY = 11
-                    },
-                    X = 65,
-                    Y = i
-                });
-            }
-            _uiPermanents.Add(new UIRenderInfo()
-            {
-                RenderInfo = new TileRenderInfo()
-                {
-                    BackColor = Color.Black,
-                    TileColor = Color.White,
-                    TileX = 11,
-                    TileY = 12
-                },
-                X = 38,
-                Y = 0
-            });
-            _uiPermanents.Add(new UIRenderInfo()
-            {
-                RenderInfo = new TileRenderInfo()
-                {
-                    BackColor = Color.Black,
-                    TileColor = Color.White,
-                    TileX = 10,
-                    TileY = 12
-                },
-                X = 38,
-                Y = 38
-            });
-            _uiPermanents.Add(new UIRenderInfo()
-            {
-                RenderInfo = new TileRenderInfo()
-                {
-                    BackColor = Color.Black,
-                    TileColor = Color.White,
-                    TileX = 8,
-                    TileY = 12
-                },
-                X = 0,
-                Y = 38
-            });
-
-            for (int i = 39; i < 65; i++)
-            {
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 13,
-                        TileY = 12
-                    },
-                    X = i,
-                    Y = 0
-                });
-                _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 13,
-                        TileY = 12
-                    },
-                    X = i,
-                    Y = 38
-                });
-            }
-
-            //65
-            _uiPermanents.Add(new UIRenderInfo()
-                {
-                    RenderInfo = new TileRenderInfo()
-                    {
-                        BackColor = Color.Black,
-                        TileColor = Color.White,
-                        TileX = 11,
-                        TileY = 11
-                    },
-                    X = 65,
-                    Y = 0
-                });
-            _uiPermanents.Add(new UIRenderInfo()
-            {
-                RenderInfo = new TileRenderInfo()
-                {
-                    BackColor = Color.Black,
-                    TileColor = Color.White,
-                    TileX = 12,
-                    TileY = 11
-                },
-                X = 65,
-                Y = 38
-            });
+            var istack = new ItemStack();
+            istack.item = new Weapon() { Name = "Dagger", WeaponATK = 5 };
+            _map[(int)(pnt.X) - 3, (int)(pnt.Y)].items.items.Add(istack);
         }
 
         bool showExtras = false;
@@ -334,8 +171,6 @@ namespace RoCD.Game.GameStates
             }
         }
 
-        List<UIRenderInfo> _uiPermanents = new List<UIRenderInfo>();
-
         double altDraw = 0.0;
         public override void Draw(Microsoft.Xna.Framework.GameTime gameTime)
         {
@@ -349,19 +184,17 @@ namespace RoCD.Game.GameStates
                     if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
                     if (_map[i,j].items.items.Count == 0 || altDraw < 1)
                     {
-                        SpritesheetHelper.RenderTile(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                        SpritesheetHelper.RenderTile(_map[i, j], new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                     }
                     else
                     {
-                        SpritesheetHelper.RenderTileAlt(_map[i, j], Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                        SpritesheetHelper.RenderTileAlt(_map[i, j], new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                     }
                 }
             }
 
-            foreach (var item in _uiPermanents)
-            {
-                SpritesheetHelper.RenderTile(item.RenderInfo, Engine.SpriteBatch, SpriteSheet, new Rectangle(item.X * 12, item.Y * 12, 12, 12));
-            }
+            UIRenderer.RenderBox(0, 0, 65, 38, Color.Black, Color.Gray);
+            UIRenderer.RenderVerticalTBar(38, 0, 38, Color.Black, Color.Gray);
 
             //Debug map Screenshot
             //var ks = Engine.InputService;
@@ -393,7 +226,7 @@ namespace RoCD.Game.GameStates
                         if ((i < 0) || (j < 0) || (i >= Map.MapWidth) || (j >= Map.MapHeight)) continue;
                         if (_map[i, j].Contained != null)
                         {
-                            ShowInfo(_map[i, j].Contained, Engine.SpriteBatch, SpriteSheet, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
+                            ShowInfo(_map[i, j].Contained, new Rectangle((i - player.X + 19) * 12, (j - player.Y + 19) * 12, 12, 12));
                         }
                     }
                 }
@@ -406,27 +239,27 @@ namespace RoCD.Game.GameStates
                 for (int i = 0; i < lst.Count; i++)
                 {
                     //X 39, Y 32
-                    ShowInfo(lst[i], Engine.SpriteBatch, SpriteSheet, new Rectangle((39) * 12, (37 - i) * 12, 12, 12));
+                    UIRenderer.ShowInfo(lst[i], new Rectangle((39) * 12, (37 - i) * 12, 12, 12));
                 }
             }
 
-            ShowInfo("m." + ((int)(Engine.InputService.Mouse.Position().X/12)).ToString() + "." + ((int)(Engine.InputService.Mouse.Position().Y/12)).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(0, 39 * 12, 12, 12));
+            UIRenderer.ShowInfo("m." + ((int)(Engine.InputService.Mouse.Position().X / 12)).ToString() + "." + ((int)(Engine.InputService.Mouse.Position().Y / 12)).ToString(), new Rectangle(0, 39 * 12, 12, 12));
 
             bool can_statup = (player.stat_buypoints > 0); //ignores cost
 
-            ShowInfo(" health " + player.get(Creature.CURRHP).ToString() + " of " + player.get(Creature.MAXHP), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 1, 12, 12));
-            ShowInfo(" mana   " + player.get(Creature.CURRSP).ToString() + " of " + player.get(Creature.MAXSP), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 2, 12, 12));
+            UIRenderer.ShowInfo("HP: " + player.get(Creature.CURRHP).ToString() + "/" + player.get(Creature.MAXHP), new Rectangle(12 * 39, 12 * 1, 12, 12), Color.Black, Color.Red);
+            UIRenderer.ShowInfo("SP: " + player.get(Creature.CURRSP).ToString() + "/" + player.get(Creature.MAXSP), new Rectangle(12 * 39, 12 * 2, 12, 12), Color.Black, Color.Blue);
 
-            ShowInfo((can_statup ? "1" : " ") + " int " + player.get(Creature.INT).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 4, 12, 12));
-            ShowInfo((can_statup ? "2" : " ") + " dex " + player.get(Creature.DEX).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 5, 12, 12));
-            ShowInfo((can_statup ? "3" : " ") + " vit " + player.get(Creature.VIT).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 6, 12, 12));
-            ShowInfo((can_statup ? "4" : " ") + " agi " + player.get(Creature.AGI).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 7, 12, 12));
-            ShowInfo((can_statup ? "5" : " ") + " str " + player.get(Creature.STR).ToString(), Engine.SpriteBatch, _spriteSheet, new Rectangle(12 * 39, 12 * 8, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "1" : " ") + " INT " + player.get(Creature.INT).ToString(), new Rectangle(12 * 39, 12 * 4, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "2" : " ") + " DEX " + player.get(Creature.DEX).ToString(), new Rectangle(12 * 39, 12 * 5, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "3" : " ") + " VIT " + player.get(Creature.VIT).ToString(), new Rectangle(12 * 39, 12 * 6, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "4" : " ") + " AGI " + player.get(Creature.AGI).ToString(), new Rectangle(12 * 39, 12 * 7, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "5" : " ") + " STR " + player.get(Creature.STR).ToString(), new Rectangle(12 * 39, 12 * 8, 12, 12));
         }
 
-        private void ShowInfo(Actor actor, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
+        private void ShowInfo(Actor actor, Rectangle target)
         {
-            ShowInfo(actor.Identity, spriteBatch, SpriteSheet, target);
+            UIRenderer.ShowInfo(actor.Identity, target);
             //for (int i = 0; i < actor.Identity.Length; i++)
             //{
             //    Point tl = GetCharacterPoint(actor.Identity[i]);
@@ -436,69 +269,6 @@ namespace RoCD.Game.GameStates
             //    SpritesheetHelper.RenderTile(ti, spriteBatch, _spriteSheet, target);
             //    target = new Rectangle(target.X + 12, target.Y, target.Width, target.Height);
             //}
-        }
-
-        private void ShowInfo(string message, SpriteBatch spriteBatch, Texture2D SpriteSheet, Rectangle target)
-        {
-            for (int i = 0; i < message.Length; i++)
-            {
-                Point tl = GetCharacterPoint(message[i]);
-                TileRenderInfo bti = new TileRenderInfo { TileColor = Color.Black, TileX = 11, TileY = 13 };
-                TileRenderInfo ti = new TileRenderInfo { TileColor = Color.White, TileX = (byte)tl.X, TileY = (byte)tl.Y };
-                SpritesheetHelper.RenderTile(bti, spriteBatch, _spriteSheet, target);
-                SpritesheetHelper.RenderTile(ti, spriteBatch, _spriteSheet, target);
-                target = new Rectangle(target.X + 12, target.Y, target.Width, target.Height);
-            }
-        }
-
-        private Point GetCharacterPoint(char p)
-        {
-            switch (p)
-            {
-                case 'a': return new Point(1, 6);
-                case 'b': return new Point(2, 6);
-                case 'c': return new Point(3, 6);
-                case 'd': return new Point(4, 6);
-                case 'e': return new Point(5, 6);
-                case 'f': return new Point(6, 6);
-                case 'g': return new Point(7, 6);
-                case 'h': return new Point(8, 6);
-                case 'i': return new Point(9, 6);
-                case 'j': return new Point(10, 6);
-                case 'k': return new Point(11, 6);
-                case 'l': return new Point(12, 6);
-                case 'm': return new Point(13, 6);
-                case 'n': return new Point(14, 6);
-                case 'o': return new Point(15, 6);
-
-                case 'p': return new Point(0, 7);
-                case 'q': return new Point(1, 7);
-                case 'r': return new Point(2, 7);
-                case 's': return new Point(3, 7);
-                case 't': return new Point(4, 7);
-                case 'u': return new Point(5, 7);
-                case 'v': return new Point(6, 7);
-                case 'w': return new Point(7, 7);
-                case 'x': return new Point(8, 7);
-                case 'y': return new Point(9, 7);
-                case 'z': return new Point(10, 7);
-
-                case '0': return new Point(0, 3);
-                case '1': return new Point(1, 3);
-                case '2': return new Point(2, 3);
-                case '3': return new Point(3, 3);
-                case '4': return new Point(4, 3);
-                case '5': return new Point(5, 3);
-                case '6': return new Point(6, 3);
-                case '7': return new Point(7, 3);
-                case '8': return new Point(8, 3);
-                case '9': return new Point(9, 3);
-
-                case '.': return new Point(14, 2);
-                case '-': return new Point(15, 0);
-            }
-
-            return new Point(0, 2);
         }
 
         public override void PreLoad()

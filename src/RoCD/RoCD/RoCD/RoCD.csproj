@@ -86,6 +86,7 @@
     <Compile Include="Helpers\Tiles\Map.cs" />
     <Compile Include="Helpers\Tiles\Tile.cs" />
     <Compile Include="Helpers\Tiles\TileRenderInfo.cs" />
+    <Compile Include="Helpers\UIRenderer.cs" />
     <Compile Include="Helpers\UIRenderInfo.cs" />
     <Compile Include="Mechanics\Actor.cs" />
     <Compile Include="Mechanics\AI\Agents\PassiveEnemyAgent.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Mechanics\Factories\ActorFactory.cs" />
     <Compile Include="Mechanics\Items\Inventory.cs" />
     <Compile Include="Mechanics\Items\Item.cs" />
+    <Compile Include="Mechanics\Items\ItemStack.cs" />
     <Compile Include="Mechanics\Items\Weapon.cs" />
     <Compile Include="Mechanics\Spawner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
