@@ -166,7 +166,7 @@ namespace RapidXNA.Services
             var gs = _popupScreens[_popupScreens.Count - 1];
             gs.OnPop();
             gs.Engine = null;
-            _gameScreens.Remove(gs);
+            _popupScreens.Remove(gs);
         }
     }
 }

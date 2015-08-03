@@ -14,6 +14,7 @@ using RapidXNA.Models;
 using System.IO;
 using RoCD.Mechanics.AI.Agents;
 using RoCD.Mechanics.Items;
+using RoCD.Game.Popups;
 
 namespace RoCD.Game.GameStates
 {
@@ -43,8 +44,13 @@ namespace RoCD.Game.GameStates
             player.Y = (int)(pnt.Y);
             _map[(int)(pnt.X), (int)(pnt.Y)].Contained = player;
 
+            //TEMP
             var istack = new ItemStack();
             istack.item = new Weapon() { Name = "Dagger", WeaponATK = 5 };
+            _map[(int)(pnt.X) - 3, (int)(pnt.Y)].items.items.Add(istack);
+
+            istack = new ItemStack();
+            istack.item = new Item() { Name = "Junk Item" };
             _map[(int)(pnt.X) - 3, (int)(pnt.Y)].items.items.Add(istack);
         }
 
@@ -160,6 +166,10 @@ namespace RoCD.Game.GameStates
                     _map.Update(player);
                 }
             }
+            else if (ks.Keyboard.KeyPress(Keys.I))
+            {
+                Engine.ScreenService.ShowPopup(new InventoryPopup(_map[player.X, player.Y]));
+            }
 
             if (ks.Keyboard.KeyHeld(Keys.LeftAlt))
             {
@@ -250,11 +260,11 @@ namespace RoCD.Game.GameStates
             UIRenderer.ShowInfo("HP: " + player.get(Creature.CURRHP).ToString() + "/" + player.get(Creature.MAXHP), new Rectangle(12 * 39, 12 * 1, 12, 12), Color.Black, Color.Red);
             UIRenderer.ShowInfo("SP: " + player.get(Creature.CURRSP).ToString() + "/" + player.get(Creature.MAXSP), new Rectangle(12 * 39, 12 * 2, 12, 12), Color.Black, Color.Blue);
 
-            UIRenderer.ShowInfo((can_statup ? "1" : " ") + " INT " + player.get(Creature.INT).ToString(), new Rectangle(12 * 39, 12 * 4, 12, 12));
-            UIRenderer.ShowInfo((can_statup ? "2" : " ") + " DEX " + player.get(Creature.DEX).ToString(), new Rectangle(12 * 39, 12 * 5, 12, 12));
-            UIRenderer.ShowInfo((can_statup ? "3" : " ") + " VIT " + player.get(Creature.VIT).ToString(), new Rectangle(12 * 39, 12 * 6, 12, 12));
-            UIRenderer.ShowInfo((can_statup ? "4" : " ") + " AGI " + player.get(Creature.AGI).ToString(), new Rectangle(12 * 39, 12 * 7, 12, 12));
-            UIRenderer.ShowInfo((can_statup ? "5" : " ") + " STR " + player.get(Creature.STR).ToString(), new Rectangle(12 * 39, 12 * 8, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "1" : " ") + " INT:" + player.get(Creature.INT).ToString(), new Rectangle(12 * 39, 12 * 4, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "2" : " ") + " DEX:" + player.get(Creature.DEX).ToString(), new Rectangle(12 * 39, 12 * 5, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "3" : " ") + " VIT:" + player.get(Creature.VIT).ToString(), new Rectangle(12 * 39, 12 * 6, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "4" : " ") + " AGI:" + player.get(Creature.AGI).ToString(), new Rectangle(12 * 39, 12 * 7, 12, 12));
+            UIRenderer.ShowInfo((can_statup ? "5" : " ") + " STR:" + player.get(Creature.STR).ToString(), new Rectangle(12 * 39, 12 * 8, 12, 12));
         }
 
         private void ShowInfo(Actor actor, Rectangle target)

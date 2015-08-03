@@ -57,6 +57,11 @@ namespace RoCD.Helpers
             TileY = 12
         };
 
+        static TileRenderInfo t_blank = new TileRenderInfo()
+        {
+            TileX = 0,
+            TileY = 2
+        };
 
         public static void RenderBox(int x, int y, int w, int h, Color backColor, Color foreColor)
         {
@@ -214,14 +219,28 @@ namespace RoCD.Helpers
                 case '/': return new Point(15, 2);
 
                 case ':': return new Point(10, 3);
+                case '*': return new Point(15, 7);
             }
 
             return new Point(0, 2);
         }
 
-        internal static void ShowInfo(string p, Rectangle rectangle)
+        public static void ShowInfo(string p, Rectangle rectangle)
         {
             ShowInfo(p, rectangle, Color.Black, Color.White);
+        }
+
+        public static void RenderEmpty(int x, int y, int w, int h, Color color)
+        {
+            t_blank.BackColor = color;
+            for (int i = x; i <= x + w; i++)
+            {
+                for (int j = y; j <= y + h; j++)
+                {
+                    SpritesheetHelper.RenderTile(t_blank, new Rectangle(i * 12, j * 12, 12, 12));
+                }
+            }
+                
         }
     }
 }
