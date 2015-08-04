@@ -14,7 +14,7 @@ namespace RoCD.Mechanics.Factories
         {
             CombatLog.GameLog("ActorFactory:inflating fromCode (" + code + ")");
             //TODO: Better method/layout?
-            if (code == "0000") return new Creature { DrawColor = Color.White, TileX = 3, TileY = 7, Identity = "slime", AIAgent = new PassiveEnemyAgent() };
+            if (code == "0000") return (new Creature { DrawColor = Color.White, TileX = 3, TileY = 7, Identity = "slime", AIAgent = new PassiveEnemyAgent() }).inflate(1,8,1,6,0);
             else if (code == "0001") return new Creature { DrawColor = Color.Red, TileX = 3, TileY = 7, Identity = "super slime", AIAgent = new PassiveEnemyAgent() };
             else return null;
         }

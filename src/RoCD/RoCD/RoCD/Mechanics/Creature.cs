@@ -295,5 +295,33 @@ namespace RoCD.Mechanics
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_str">STR</param>
+        /// <param name="_vit">VIT</param>
+        /// <param name="_dex">DEX</param>
+        /// <param name="_agi">AGI</param>
+        /// <param name="_int">INT</param>
+        /// <returns></returns>
+        internal Actor inflate(int _str, int _vit, int _dex, int _agi, int _int)
+        {
+            set(STR, _str);
+            set(VIT, _vit);
+            set(DEX, _dex);
+            set(AGI, _agi);
+            set(INT, _int);
+
+            fullHeal();
+
+            return this;
+        }
+
+        private void fullHeal()
+        {
+            set(CURRHP, get(MAXHP));
+            set(CURRSP, get(MAXSP));
+        }
     }
 }
