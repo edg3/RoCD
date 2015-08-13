@@ -17,7 +17,7 @@ namespace MapGen.Structure
         public double f;
         public double g;
 
-        VEdge neighbour { get; set; }
+        public VEdge neighbour { get; set; }
 
         /// <summary>
         /// Constructor of the class.

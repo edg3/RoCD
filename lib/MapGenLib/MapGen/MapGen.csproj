@@ -40,7 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GenerationLayers\IslandGenerator.cs" />
-    <Compile Include="Structure\MapPoint.cs" />
+    <Compile Include="Structure\VEdge.cs" />
+    <Compile Include="Structure\VEvent.cs" />
+    <Compile Include="Structure\Voronoi.cs" />
+    <Compile Include="Structure\VParabola.cs" />
+    <Compile Include="Structure\VPoint.cs" />
     <Compile Include="IGenerationLayer.cs" />
     <Compile Include="MapContent.cs" />
     <Compile Include="MapGenerator.cs" />

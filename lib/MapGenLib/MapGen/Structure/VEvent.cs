@@ -12,6 +12,16 @@ namespace MapGen.Structure
         public bool pe { get; set; }
         public double y { get; set; }
         public VParabola arch { get; set; }
+        public static IComparer<VEvent> Comparer { get { return new VEventComparer(); } }
+
+        public class VEventComparer : IComparer<VEvent>
+        {
+            public int Compare(VEvent x, VEvent y)
+            {
+                //TODO: make sure this is in the right direction
+                return (int)(x.y - y.y);
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -23,17 +33,6 @@ namespace MapGen.Structure
             point = p;
             pe = pev;
             y = p.Y;
-        }
-
-        /// <summary>
-        /// Function to compare 2 events by their 'y' value
-        /// </summary>
-        /// <param name="l"></param>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public static bool Compare(VEvent l, VEvent r)
-        {
-            return (l.y < r.y);
         }
     }
 }
