@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MapGen.Structure
 {
-    public class MapPoint
+    public class Voronoi
     {
-        public uint X { get; set; }
-        public uint Y { get; set; }
+
     }
 }

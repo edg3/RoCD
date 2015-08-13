@@ -8,6 +8,6 @@ namespace MapGen
 {
     public interface IGenerationLayer
     {
-        public void Generate(uint[,] ground, uint[,] tile, uint w, uint h);
+        void Generate(uint[,] ground, uint[,] tile, uint w, uint h);
     }
 }
