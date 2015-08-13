@@ -55,5 +55,15 @@ namespace MapGen
 
             System.Console.WriteLine("Generation complete");
         }
+
+        public uint this[int i, int j, bool isGround]
+        {
+            get
+            {
+                if (isGround)
+                    return _ground[i, j];
+                return _tile[i, j];
+            }
+        }
     }
 }

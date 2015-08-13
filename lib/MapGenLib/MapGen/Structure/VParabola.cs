@@ -17,8 +17,8 @@ namespace MapGen.Structure
         private VParabola _left { get; set; }
         private VParabola _right { get; set; }
 
-        public void SetLeft(VParabola p) { _left = p; p.parent = this; }
-        public void SetRight(VParabola p) { _right = p;  p.parent = this; }
+        public void SetLeft(VParabola p) { _left = p; if (null != p) p.parent = this; }
+        public void SetRight(VParabola p) { _right = p; if (null != p) p.parent = this; }
         public VParabola Left() { return _left; }
         public VParabola Right() { return _right; }
 
@@ -73,6 +73,7 @@ namespace MapGen.Structure
         {
             if (null == p) return null;
             VParabola par = p.Left();
+            if (null == par) return null;
             while (!par.isLeaf) par = par.Right();
             return par;
         }
@@ -81,6 +82,7 @@ namespace MapGen.Structure
         {
             if (null == p) return null;
             VParabola par = p.Right();
+            if (null == par) return null;
             while (!par.isLeaf) par = par.Left();
             return par;
         }

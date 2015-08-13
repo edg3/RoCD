@@ -27,6 +27,7 @@ namespace MapGen.Structure
         /// <param name="b">Right point</param>
         public VEdge(VPoint s, VPoint a, VPoint b)
         {
+            
             start = s;
             left = a;
             right = b;

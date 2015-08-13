@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace MapGen.Structure
 {
-    /// <summary>
-    /// Note: Vertices => typedef std::list<VPoint *>		Vertices	;
-	///       Edges => typedef std::list<VEdge *>      Edges       ;
-    /// </summary>
     public class Voronoi
     {
         List<VPoint> places = new List<VPoint>();
-        List<VEdge> edges = new List<VEdge>();
+        List<VEdge> edges = null;
         double width;
         double height;
         VParabola root;
@@ -36,9 +32,13 @@ namespace MapGen.Structure
             height = h;
             root = null;
 
-            edges.Clear();
-            points.Clear();
-            queue.Clear();
+            if (null == edges) edges = new List<VEdge>();
+            else
+            {
+                points.Clear();
+                edges.Clear();
+                queue.Clear();
+            }
 
             for (int i = 0; i < places.Count; ++i)
             {
@@ -50,11 +50,11 @@ namespace MapGen.Structure
             VEvent e;
             while (queue.Count > 0)
             {
-                e = queue[queue.Count - 1];
+                e = queue[0]; //reversed order to test
                 queue.Remove(e);
 
                 ly = e.point.Y;
-                if (deleted.Contains(e) && (deleted.LastOrDefault() == e))
+                if (deleted.Contains(e) && (deleted.LastOrDefault() != e))
                 {
                     deleted.Remove(e); continue;
                 }
@@ -63,12 +63,14 @@ namespace MapGen.Structure
             }
 
             FinishEdge(root);
+            root = null;
 
             for (int i = 0; i < edges.Count; ++i)
             {
                 if (null != edges[i].neighbour)
                 {
                     edges[i].start = edges[i].neighbour.end;
+                    edges[i].neighbour = null; //dereference
                 }
             }
 
@@ -79,11 +81,11 @@ namespace MapGen.Structure
         {
             if (null == root)
             {
-                root = new VParabola();
+                root = new VParabola(p);
                 return;
             }
 
-            if (root.isLeaf && (root.site.X - p.Y < 1))
+            if (root.isLeaf && (root.site.Y - p.Y < 1))
             {
                 VPoint fp = root.site;
                 root.isLeaf = false;
@@ -108,6 +110,8 @@ namespace MapGen.Structure
             VPoint start = new VPoint() { X = p.X, Y = (int)GetY(par.site, p.X) };
             points.Add(start);
 
+            //if ((null == start) || (null == par.site) || (null == p)) return;
+
             VEdge el = new VEdge(start, par.site, p);
             VEdge er = new VEdge(start, p, par.site);
 
@@ -129,7 +133,7 @@ namespace MapGen.Structure
             par.Left().SetRight(p1);
 
             CheckCircle(p0);
-            CheckCircle(p1);
+            CheckCircle(p2);
         }
 
         void RemoveParabola(VEvent e)
@@ -181,7 +185,7 @@ namespace MapGen.Structure
             else
             {
                 if (gparent.Left() == p1.parent) gparent.SetLeft(p1.parent.Left());
-                if (gparent.Right() == p1.parent) gparent.SetRight(p1.parent.Right());
+                if (gparent.Right() == p1.parent) gparent.SetRight(p1.parent.Left());
             }
 
             CheckCircle(p0);
@@ -192,6 +196,7 @@ namespace MapGen.Structure
         {
             if (n.isLeaf) { return; }
             double mx;
+            //if (null == n.edge) return;
             if (n.edge.direction.X > 0) mx = Math.Max(width, n.edge.start.X + 10);
             else mx = Math.Min(0, n.edge.start.X - 10);
 
@@ -200,13 +205,17 @@ namespace MapGen.Structure
             points.Add(end);
 
             FinishEdge(n.Left());
+            n.SetLeft(null);
             FinishEdge(n.Right());
+            n.SetRight(null);
         }
 
         double GetXOfEdge(VParabola par, double y)
         {
             VParabola left = VParabola.GetLeftChild(par);
             VParabola right = VParabola.GetRightChild(par);
+
+            //if ((null == left) || (null == right)) return 0.0;
 
             VPoint p = left.site;
             VPoint r = right.site;
@@ -272,7 +281,6 @@ namespace MapGen.Structure
 
             VPoint s = null;
             s = GetEdgeIntersection(lp.edge, rp.edge);
-
             if (null == s) return;
 
             double dx = a.site.X - s.X;
