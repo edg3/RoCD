@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace MapGen.Structure
 {
+    /// <summary>
+    /// Swap to delauney? ref:
+    /// a. http://ojs.academypublisher.com/index.php/jsw/article/viewFile/jsw0903777784/9006
+    /// b. http://www.ens-lyon.fr/LIP/Arenaire/ERGeoAlgo/JDB-ens-lyon-I.pdf
+    /// c. http://stackoverflow.com/questions/85275/how-do-i-derive-a-voronoi-diagram-given-its-point-set-and-its-delaunay-triangula
+    /// d. https://github.com/jceipek/Unity-delaunay
+    /// e. http://stackoverflow.com/questions/7309538/efficient-delaunay-triangulation
+    /// f. http://answers.unity3d.com/questions/448156/c-simple-voronoidelaunay-diagrams-for-starters.html
+    /// g. https://github.com/PouletFrit/csDelaunay
+    /// 
+    /// Decided to use g
+    /// </summary>
     public class Voronoi
     {
         List<VPoint> places = new List<VPoint>();
