@@ -11,6 +11,20 @@ namespace csDelaunay {
 			this.vertices = vertices;
 		}
 
+        public Rectf Bounds()
+        {
+            float small_x = 9999999, small_y = 99999999, large_x = 0, large_y = 0;
+            foreach (var vert in vertices)
+            {
+                if (vert.x < small_x) small_x = vert.x;
+                if (vert.x > large_x) large_x = vert.x;
+                if (vert.y < small_y) small_y = vert.y;
+                if (vert.y > large_y) large_y = vert.y;
+            }
+
+            return new Rectf(small_x, small_y, large_x - small_x, large_y - small_y);
+        }
+
 		public float Area() {
 			return Math.Abs(SignedDoubleArea() * 0.5f);
 		}
@@ -41,5 +55,21 @@ namespace csDelaunay {
 
 			return signedDoubleArea;
 		}
+
+        public bool Contains(Vector2f point)
+        {
+            int i, j, nvert = vertices.Count;
+            bool c = false;
+
+            for (i = 0, j = nvert - 1; i < nvert; j = i++)
+            {
+                if (((vertices[i].y >= point.y) != (vertices[j].y >= point.y)) &&
+                    (point.x <= (vertices[j].x - vertices[i].x) * (point.y - vertices[i].y) / (vertices[j].y - vertices[i].y) + vertices[i].x)
+                  )
+                    c = !c;
+            }
+
+            return c;
+        }
 	}
 }

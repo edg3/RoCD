@@ -12,7 +12,7 @@ namespace MapGenLib
     {
         static void Main(string[] args)
         {
-            MapGen.MapGenerator mgen = new MapGen.MapGenerator(1000, 1000);
+            MapGen.MapGenerator mgen = new MapGen.MapGenerator(4000, 4000);
 
             mgen.AddLayer(new MapGen.GenerationLayers.IslandGenerator());
 
