@@ -41,16 +41,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GenerationLayers\IslandGenerator.cs" />
-    <Compile Include="Structure\VEdge.cs" />
-    <Compile Include="Structure\VEvent.cs" />
-    <Compile Include="Structure\Voronoi.cs" />
-    <Compile Include="Structure\VParabola.cs" />
-    <Compile Include="Structure\VPoint.cs" />
     <Compile Include="IGenerationLayer.cs" />
     <Compile Include="MapContent.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Edge.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\EdgeList.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\EdgeReorderer.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Halfedge.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\HalfedgePriorityQueue.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\ICoord.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\LR.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Site.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\SiteList.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Triangle.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Vertex.cs" />
+    <Compile Include="Structure\csDelaunay\Delaunay\Voronoi.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\Circle.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\LineSegment.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\Polygon.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\Rectf.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\Vector2f.cs" />
+    <Compile Include="Structure\csDelaunay\Geom\Winding.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
