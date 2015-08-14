@@ -382,5 +382,23 @@ namespace csDelaunay {
 			if (s1.x > s2.x) return 1;
 			return 0;
 		}
-	}
+
+        private List<Polygon> _polygons;
+        public List<Polygon> Polygons
+        {
+            get
+            {
+                if (null == _polygons)
+                {
+                    _polygons = new List<Polygon>();
+                    var regions = Regions();
+                    foreach (var region in regions)
+                    {
+                        _polygons.Add(new Polygon(region));
+                    }
+                }
+                return _polygons;
+            }
+        }
+    }
 }
