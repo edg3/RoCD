@@ -42,8 +42,6 @@ namespace MapGen.GenerationLayers
             //v.LloydRelaxation(2); //crashes - TODO
             vd = v.VoronoiDiagram();
 
-            var regions = v.Regions();
-
             Bitmap image = new Bitmap((int)width, (int)height);
             Graphics imageGraphics = Graphics.FromImage(image);
 
@@ -54,10 +52,10 @@ namespace MapGen.GenerationLayers
             PerlinNoise.heightDivisor = height;
 
             List<Polygon> waterRegions = new List<Polygon>();
+            var sea_edges = new List<Edge>();
 
-            foreach (var rg in regions)
+            foreach (var p in v.Polygons)
             {
-                Polygon p = new Polygon(rg);
                 Rectf poly_bounds = p.Bounds();
 
                 if ((PerlinNoise.TripleOctave(pnoise, new Point((int)poly_bounds.x, (int)poly_bounds.y)) < 0.475) || ((poly_bounds.x < 10) || (poly_bounds.y < 10) || (poly_bounds.x + poly_bounds.width > width - 10) || (poly_bounds.y + poly_bounds.height > height - 10)))
@@ -74,6 +72,7 @@ namespace MapGen.GenerationLayers
                             if (waterRegions.Contains(p))
                             {
                                 ground[i, j] = (uint)MapContent.Water;
+                                imageGraphics.FillRectangle(Brushes.LightBlue, new Rectangle(i, j, 1, 1));
                             }
                             else
                             {
@@ -85,8 +84,77 @@ namespace MapGen.GenerationLayers
                 }
             }
 
-            image.Save(DateTime.Now.ToString("yyyyMMddhhmmss") + "_regions.bmp");
+            //BuildPolygonNeighbourhood(v.Polygons);
+
+            var seaEdges = new List<Edge>();
+            foreach (var edge in v.Edges)
+            {
+                //find edges that border land
+                var pl = FindPolyForSitePoint(v.Polygons, edge.LeftSite.Coord);
+                var pr = FindPolyForSitePoint(v.Polygons, edge.RightSite.Coord);
+
+                if ((null == pl) || (null == pr)) continue; //This should never happen
+
+                if (((waterRegions.Contains(pl)) && (!waterRegions.Contains(pr))) || ((!waterRegions.Contains(pl)) && (waterRegions.Contains(pr))))
+                {
+                    seaEdges.Add(edge);
+                    
+                    imageGraphics.DrawLine(Pens.Purple,new Point((int)edge.LeftVertex.Coord.x, (int)edge.LeftVertex.Coord.y), new Point((int)edge.RightVertex.Coord.x, (int)edge.RightVertex.Coord.y));
+                }
+            }
+
+            image.Save(DateTime.Now.ToString("yyyyMMddhhmmss") + "_finalmap.bmp");
         }
 
+        private Polygon FindPolyForSitePoint(List<Polygon> polygons, Vector2f coord)
+        {
+            for (int i = 0; i < polygons.Count; ++i)
+            {
+                if (polygons[i].Contains(coord)) return polygons[i];
+            }
+
+            return null;
+        }
+
+        class PolyNeighbour
+        {
+            public Polygon a;
+            public Polygon b;
+            public Edge e;
+
+            public bool Has(Polygon q)
+            {
+                if ((a == q) || (b == q)) return true;
+
+                return false;
+            }
+        }
+
+        List<PolyNeighbour> neighborhood = new List<PolyNeighbour>();
+
+        private void BuildPolygonNeighbourhood(List<Polygon> allPolygons)
+        {
+            for (int i = 0; i < allPolygons.Count; ++i)
+            {
+                for (int j = 0; j < allPolygons.Count; ++j)
+                {
+                    if (i == j) continue;
+                    
+                }
+            }
+        }
+
+        private bool LandMassBySpace(uint[,] ground, int i, int j)
+        {
+            if (ground[i,j] == (uint)MapContent.Grass)
+            {
+                if (ground[i - 1, j] != (uint)MapContent.Grass) return true;
+                if (ground[i + 1, j] != (uint)MapContent.Grass) return true;
+                if (ground[i, j - 1] != (uint)MapContent.Grass) return true;
+                if (ground[i, j + 1] != (uint)MapContent.Grass) return true;
+            }
+
+            return false;
+        }
     }
 }

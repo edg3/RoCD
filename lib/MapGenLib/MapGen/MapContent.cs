@@ -13,6 +13,7 @@ namespace MapGen
         /// </summary>
         Mountain = 0,
         Water,
+        Beach,
         Forest,
         Grass,
         Dirt,
