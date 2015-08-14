@@ -63,6 +63,7 @@
     <Compile Include="Structure\csDelaunay\Geom\Rectf.cs" />
     <Compile Include="Structure\csDelaunay\Geom\Vector2f.cs" />
     <Compile Include="Structure\csDelaunay\Geom\Winding.cs" />
+    <Compile Include="Structure\perlinNoise\PerlinNoise.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

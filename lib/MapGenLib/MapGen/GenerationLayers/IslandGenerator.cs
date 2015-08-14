@@ -1,4 +1,5 @@
 ﻿using csDelaunay;
+using ImageTools.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,7 +28,7 @@ namespace MapGen.GenerationLayers
 
             List<Vector2f> _points = new List<Vector2f>();
 
-            int num_points = (int)Math.Max(Math.Pow(w * h, 1 / 2.66), 350);
+            int num_points = (int)Math.Max(Math.Pow(w * h, 1 / 3), 120);
 
             for (int i = 0; i < num_points; ++i)
             {
@@ -36,7 +37,7 @@ namespace MapGen.GenerationLayers
 
             Voronoi v = new Voronoi(_points, _bounds);
 
-            
+
             var vd = v.VoronoiDiagram();
             //v.LloydRelaxation(2); //crashes - TODO
             vd = v.VoronoiDiagram();
@@ -45,57 +46,46 @@ namespace MapGen.GenerationLayers
 
             Bitmap image = new Bitmap((int)width, (int)height);
             Graphics imageGraphics = Graphics.FromImage(image);
-            
+
             imageGraphics.FillRectangle(Brushes.White, 0, 0, (float)width, (float)height);
 
-            foreach (var segmnt in vd)
-            {
-                try {
-                    imageGraphics.DrawLine(Pens.Red, new Point((int)segmnt.p0.x, (int)segmnt.p0.y), new Point((int)segmnt.p1.x, (int)segmnt.p1.y));
-                }
-                catch { }
-            }
+            PerlinNoise pnoise = new PerlinNoise(rndm.Next());
+            PerlinNoise.widthDivisor = width;
+            PerlinNoise.heightDivisor = height;
 
-            image.Save(DateTime.Now.ToString("yyyyMMddhhmmss") + "_lines.bmp");
+            List<Polygon> waterRegions = new List<Polygon>();
 
             foreach (var rg in regions)
             {
                 Polygon p = new Polygon(rg);
                 Rectf poly_bounds = p.Bounds();
 
-                Brush myBrush = RandomBrush();
-
-                for (int i = (int)poly_bounds.x; i < (int)(poly_bounds.x + poly_bounds.width); i++)
+                if ((PerlinNoise.TripleOctave(pnoise, new Point((int)poly_bounds.x, (int)poly_bounds.y)) < 0.475) || ((poly_bounds.x < 10) || (poly_bounds.y < 10) || (poly_bounds.x + poly_bounds.width > width - 10) || (poly_bounds.y + poly_bounds.height > height - 10)))
                 {
-                    for (int j = (int)poly_bounds.y; j < (int)(poly_bounds.y + poly_bounds.height); j++)
+                    waterRegions.Add(p);
+                }
+
+                for (int i = (int)Math.Floor(poly_bounds.x); i < (int)(poly_bounds.x + poly_bounds.width); i++)
+                {
+                    for (int j = (int)Math.Floor(poly_bounds.y); j < (int)(poly_bounds.y + poly_bounds.height); j++)
                     {
-                        try
+                        if (p.Contains(new Vector2f(i, j)))
                         {
-                            if (p.Contains(new Vector2f(i, j)))
-                                imageGraphics.FillRectangle(myBrush, new Rectangle(i, j, 1, 1));
-                        } catch { }
+                            if (waterRegions.Contains(p))
+                            {
+                                ground[i, j] = (uint)MapContent.Water;
+                            }
+                            else
+                            {
+                                ground[i, j] = (uint)MapContent.Grass;
+                                imageGraphics.FillRectangle(Brushes.LightGreen, new Rectangle(i, j, 1, 1));
+                            }
+                        }
                     }
                 }
             }
 
             image.Save(DateTime.Now.ToString("yyyyMMddhhmmss") + "_regions.bmp");
-        }
-
-        private Brush RandomBrush()
-        {
-            Random rndm = new Random();
-            int choice = rndm.Next(5);
-
-            switch (choice)
-            {
-                case 0: return Brushes.Blue;
-                case 1: return Brushes.Green;
-                case 2: return Brushes.Orange;
-                case 3: return Brushes.Yellow;
-                case 4: return Brushes.Violet;
-            }
-
-            return Brushes.Red;
         }
 
     }
