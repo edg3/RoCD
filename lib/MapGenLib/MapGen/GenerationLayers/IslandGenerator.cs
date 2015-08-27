@@ -84,7 +84,7 @@ namespace MapGen.GenerationLayers
                 }
             }
 
-            //BuildPolygonNeighbourhood(v.Polygons);
+            BuildPolygonNeighbourhood(v.Polygons);
 
             var seaEdges = new List<Edge>();
             foreach (var edge in v.Edges)
@@ -98,7 +98,10 @@ namespace MapGen.GenerationLayers
                 if (((waterRegions.Contains(pl)) && (!waterRegions.Contains(pr))) || ((!waterRegions.Contains(pl)) && (waterRegions.Contains(pr))))
                 {
                     seaEdges.Add(edge);
-                    
+
+                    imageGraphics.FillRectangle(Brushes.Red, new Rectangle((int)edge.LeftSite.Coord.x - 2, (int)edge.LeftSite.Coord.y - 2, 4, 4));
+                    imageGraphics.FillRectangle(Brushes.Red, new Rectangle((int)edge.RightSite.Coord.x - 2, (int)edge.RightSite.Coord.y - 2, 4, 4));
+
                     imageGraphics.DrawLine(Pens.Purple,new Point((int)edge.LeftVertex.Coord.x, (int)edge.LeftVertex.Coord.y), new Point((int)edge.RightVertex.Coord.x, (int)edge.RightVertex.Coord.y));
                 }
             }
@@ -120,7 +123,9 @@ namespace MapGen.GenerationLayers
         {
             public Polygon a;
             public Polygon b;
-            public Edge e;
+
+            public Vector2f q;
+            public Vector2f r;
 
             public bool Has(Polygon q)
             {
@@ -140,6 +145,24 @@ namespace MapGen.GenerationLayers
                 {
                     if (i == j) continue;
                     
+                    if (allPolygons[i].Vertices.Intersect(allPolygons[j].Vertices).ToList().Count > 1)
+                    {
+                        allPolygons[i].AddNeighbour(allPolygons[j]);
+                        allPolygons[j].AddNeighbour(allPolygons[i]);
+                        var isinside = (from item in neighborhood
+                                        where item.Has(allPolygons[i]) && item.Has(allPolygons[j])
+                                        select item).ToList().Count;
+                        if (isinside < 1)
+                        {
+                            neighborhood.Add(new PolyNeighbour()
+                            {
+                                a = allPolygons[i],
+                                b = allPolygons[j],
+                                q = allPolygons[i].Vertices.Intersect(allPolygons[j].Vertices).ToList()[0],
+                                r = allPolygons[i].Vertices.Intersect(allPolygons[j].Vertices).ToArray()[1]
+                            });
+                        }
+                    }
                 }
             }
         }

@@ -7,6 +7,11 @@ namespace csDelaunay {
 
 		private List<Vector2f> vertices;
 
+        public List<Vector2f> Vertices
+        {
+            get { return vertices; }
+        }
+
 		public Polygon(List<Vector2f> vertices) {
 			this.vertices = vertices;
 		}
@@ -72,5 +77,19 @@ namespace csDelaunay {
             return c;
         }
 
-	}
+        private List<Polygon> neighbours = new List<Polygon>();
+
+        public List<Polygon> Neighbours
+        {
+            get { return neighbours; }
+        }
+
+        internal void AddNeighbour(Polygon polygon)
+        {
+            if (!neighbours.Contains(polygon))
+            {
+                neighbours.Add(polygon);
+            }
+        }
+    }
 }
