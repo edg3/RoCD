@@ -478,10 +478,19 @@ namespace RoCD.Helpers.Tiles
                         if ((item as Creature).get(Creature.CURRHP) <= 0)
                         {
                             //remove, dead!
-                            //NOTE: DO NOT GENERATE LOOT HERE
+                            
                             var i_temp = item;
                             registeredActors.Remove(item);
                             _map[i_temp.X, i_temp.Y].Contained = null;
+
+                            if ((i_temp as Creature).KilledBy == player)
+                            {
+                                var plyr = player as Creature;
+                                var crtr = i_temp as Creature;
+                                plyr.addExpBase(crtr.exp_base);
+                                plyr.addExpJob(crtr.exp_job);
+                                //TODO: Generate loot from loot table
+                            }
                         }
                     }
                 }

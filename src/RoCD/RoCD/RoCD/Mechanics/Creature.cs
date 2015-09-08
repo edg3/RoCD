@@ -67,8 +67,8 @@ namespace RoCD.Mechanics
 
         public double critChance = 1.0 / 20.0; //1 in 20 chance approx
 
-        ushort exp_base;
-        ushort exp_job;
+        public ushort exp_base;
+        public ushort exp_job;
         ushort level_base;
         ushort level_job;
 
@@ -216,7 +216,7 @@ namespace RoCD.Mechanics
             { //there's a minimum damage of 1 per hit
                 finalDamage = 1;
             }
-            other.takeDamage(finalDamage);
+            other.takeDamage(this, finalDamage);
 
             CombatLog.GameLog("Creature:" + Identity + " hit " + other.Identity + " for " + finalDamage.ToString());
 
@@ -224,13 +224,22 @@ namespace RoCD.Mechanics
             return 0;
         }
 
-        public bool takeDamage(int damage)
+        private Actor _killedBy;
+
+        public Actor KilledBy
+        {
+            get { return _killedBy; }
+            private set { _killedBy = value; }
+        }
+
+        public bool takeDamage(Actor sender, int damage)
         {
             CombatLog.Log(Identity + " takes " + damage.ToString() + " damage");
             stats[CURRHP] = stats[CURRHP] - damage;
             if (stats[CURRHP] <= 0)
             {
                 stats[CURRHP] = 0;
+                _killedBy = sender;
             }
             return (stats[CURRHP] == 0);
         }
@@ -305,13 +314,16 @@ namespace RoCD.Mechanics
         /// <param name="_agi">AGI</param>
         /// <param name="_int">INT</param>
         /// <returns></returns>
-        internal Actor inflate(int _str, int _vit, int _dex, int _agi, int _int)
+        internal Actor inflate(int _str, int _vit, int _dex, int _agi, int _int, ushort _bexp, ushort _jexp)
         {
             set(STR, _str);
             set(VIT, _vit);
             set(DEX, _dex);
             set(AGI, _agi);
             set(INT, _int);
+
+            exp_base = _bexp;
+            exp_job = _jexp;
 
             fullHeal();
 
