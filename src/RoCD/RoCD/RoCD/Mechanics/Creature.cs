@@ -23,6 +23,7 @@ namespace RoCD.Mechanics
             level_job = 1;
 
             exp_next_base = 4;
+            exp_next_job = 4;
 
             updateSecondary_STR();
             updateSecondary_VIT();
@@ -33,6 +34,8 @@ namespace RoCD.Mechanics
 
             stats[CURRHP] = stats[MAXHP];
             stats[CURRSP] = stats[MAXSP];
+
+            stats[SKILLPOINTS] = 1;
 
             stat_buypoints = 20;
         }
@@ -53,7 +56,7 @@ namespace RoCD.Mechanics
         public const int ATK = 11;
         public const int BOWATK = 12;
         public const int MATK = 13;
-        //static const int MAXMATK=14;
+        //static const int MAXMATK=14; //TODO: use this?
         public const int HARDDEF = 15;
         public const int SOFTDEF = 16;
         public const int HARDMDEF = 17;
@@ -64,6 +67,7 @@ namespace RoCD.Mechanics
         public const int BLVL = 22;
         public const int JLVL = 23;
         public const int STATPOINTS = 24;
+        public const int SKILLPOINTS = 25;
 
         public double critChance = 1.0 / 20.0; //1 in 20 chance approx
 
@@ -73,10 +77,11 @@ namespace RoCD.Mechanics
         ushort level_job;
 
         ushort exp_next_base;
+        ushort exp_next_job;
 
         public ushort stat_buypoints;
 
-        public const int totalStats = 25;
+        public const int totalStats = 26;
         int[] stats = new int[totalStats];
 
         public void increaseStat(int stat)
@@ -99,14 +104,21 @@ namespace RoCD.Mechanics
 
         public void checkExp()
         {
-            if (level_base == 99) return;
-
-            if (exp_base > exp_next_base)
+            if ((exp_base > exp_next_base) && (level_base < 99))
             {
                 level_base++;
-                exp_next_base = (ushort)(exp_next_base + (int)Math.Floor(1.02 * level_base * Math.Sqrt(exp_next_base)));
+                exp_next_base = (ushort)(exp_next_base + (int)Math.Floor(1.02 * level_base * Math.Sqrt(exp_next_base))); //BALANCE
                 exp_base = 0;
+                stats[STATPOINTS] += level_base + (int)Math.Floor(level_base / 3.3); //BALANCE
                 CombatLog.GameLog("Creature:" + Identity + " levelled up");
+            }
+
+            if ((exp_job > exp_next_job) && (level_job < 99))
+            {
+                level_job++;
+                exp_next_job += (ushort)(level_job * 3 + 4); //BALANCE
+                stats[SKILLPOINTS] += 1;
+                CombatLog.GameLog("Creature:" + Identity + " levelled up job");
             }
         }
 
