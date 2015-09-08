@@ -21,6 +21,7 @@ namespace RoCD.Mechanics
         }
 
         public string factoryCode = "0000";
+        public string rareCode = "0001";
 
         public bool hasSpawned = false;
 
@@ -35,7 +36,8 @@ namespace RoCD.Mechanics
                     //find an open neighbouring cell:
                     if (_map[X - 1, Y].Contained == null)
                     {
-                        _map[X - 1, Y].Contained = ActorFactory.FromCode(factoryCode);
+                        string useCode = (RoCDRndm.NextDouble() > 0.9 ? rareCode : factoryCode);
+                        _map[X - 1, Y].Contained = ActorFactory.FromCode(useCode);
                         _map[X - 1, Y].Contained.X = X - 1;
                         _map[X - 1, Y].Contained.Y = Y;
                         _map.registeredActors.Add(_map[X - 1, Y].Contained);
